@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>帮助系统</title>
+<link rel="stylesheet" type="text/css" href="css/weui.min.css">
+<style type="text/css">
+body {
+	background: #f8f8f8;
+}
+
+</style>
+</head>
+
+<body>
+
+<script type="text/x-template" id="main">
+	<div>
+		<div class="weui-cells">
+			<div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>1.设置所需要的换次次数</p>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>2.设置所需要的压差，可以是正压和负压</p>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>3.自动工作模式下，按启动键，系统自动工作</p>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>4.系统根据换气次数，输出排风量，根据设置压差，自动调节进风量，使系统平衡，稳定工作</p>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>5.手动模式下，可手动设置换次次数，并通过观察实测压差数值，手动调节进风风速</p>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </div>
+            
+        </div>
+	</div>	
+</script>
+
+
+
+	<div id="app">
+
+       <router-view></router-view>
+
+	</div>
+
+	<script src="js/vue.min.js"></script>
+	<script src="js/vue-resource.min.js"></script>
+	<script src="js/vue-router.min.js"></script>
+<script type="text/javascript">
+function onData(data){
+	
+}
+const main = { template: '#main' }
+const companyInfo = { template: '#companyInfo' }
+var router = new VueRouter({
+  routes:[
+	  { path: '/', component: main },
+	 
+	]
+});
+var app = new Vue({
+  router:router,
+  data:{
+  	
+  }
+}).$mount('#app');
+
+</script>
+</body>
+</html>

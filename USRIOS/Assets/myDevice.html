@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>我的设备</title>
+<link rel="stylesheet" type="text/css" href="css/weui.min.css">
+<style type="text/css">
+body {
+	background: #f8f8f8;
+}
+
+.connect{
+	color: #333;
+}
+
+</style>
+</head>
+
+<body>
+	<div id="app">
+        <div class="weui-cells">
+        	<div class="weui-cell" v-for="host in hostList">
+                <div class="weui-cell__bd">
+                    <p>ivc智控{{host.deviceId}}</p>
+                </div>
+                <div class="weui-cell__ft">{{host.mac}}</div>
+            </div>
+        </div>
+	</div>
+
+	<script src="js/vue.min.js"></script>
+	<script src="js/vue-resource.min.js"></script>
+<script type="text/javascript">
+function onData(data){
+	app.hostList = JSON.parse(data);
+	app.hostList.forEach(function(host){
+		host.connect = 1;
+	})
+}
+var app = new Vue({
+
+	created : function() {
+		var that = this;
+		/* hostList = [{
+			deviceId:'1',
+			connect:1
+		},{
+			deviceId:'2',
+			connect:0
+		},{
+			deviceId:'3',
+			connect:1
+		}]; */
+	},
+	data : {
+		hostList:[]
+	},
+	methods:{
+		
+	}
+}).$mount('#app');
+
+</script>
+</body>
+</html>

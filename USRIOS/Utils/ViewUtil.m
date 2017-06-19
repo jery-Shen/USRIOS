@@ -39,4 +39,11 @@
                             blue:((float) b / 255.0f)
                            alpha:1.0f];
 }
+
++(void)alertMsg:(NSString *)msg inViewController:(UIViewController *)vc{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:msg message:nil preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+    [alertController addAction:cancelAction];
+    [vc presentViewController:alertController animated:YES completion:nil];
+}
 @end

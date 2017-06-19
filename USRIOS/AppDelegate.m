@@ -10,7 +10,9 @@
 #import "NavigationController.h"
 #import "ViewUtil.h"
 #import "LoginViewController.h"
-
+#import "DeviceListViewController.h"
+#import "DeviceListWifiViewController.h"
+#import "HttpUtil.h"
 
 
 @interface AppDelegate ()
@@ -29,12 +31,66 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.translucent = NO;
     
-    LoginViewController *login = [[LoginViewController alloc]init];
-    [self.navigationController setViewControllers:[[NSArray alloc]initWithObjects:login, nil]];
+    
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+    NSDictionary *user = [defaults objectForKey:@"user"];
+    if(user==nil){
+        LoginViewController *loginVc = [[LoginViewController alloc]init];
+        [self.navigationController setViewControllers:[[NSArray alloc]initWithObjects:loginVc, nil]];
+    }else{
+        NSInteger  mode = [defaults integerForKey:@"mode"] ;
+        if(mode==0){
+            DeviceListViewController *deviceListVc = [[DeviceListViewController alloc]init];
+            [self.navigationController setViewControllers:[[NSArray alloc]initWithObjects:deviceListVc, nil]];
+        }else{
+            DeviceListWifiViewController *deviceWifiListVc = [[DeviceListWifiViewController alloc]init];
+            [self.navigationController setViewControllers:[[NSArray alloc]initWithObjects:deviceWifiListVc, nil]];
+        }
+        
+        NSLog(@"%@,%@",user[@"userName"],user[@"userPwd"]);
+        [self loginWithName:user[@"userName"] andPwd:user[@"userPwd"]];
+        
+    }
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
     return YES;
+}
+
+-(void)loginWithName:(NSString *)userName andPwd:(NSString *)userPwd{
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@Login",URL_PRE]];
+    NSString *postBody = [NSString stringWithFormat:@"userName=%@&userPwd=%@",userName,userPwd];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = [postBody dataUsingEncoding:NSUTF8StringEncoding];
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                            completionHandler:
+                                  ^(NSData *data, NSURLResponse *response, NSError *error) {
+                                      if(!error){
+                                          NSDictionary *res =   [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&error];
+                                          if([res[@"status"] intValue] == 200){
+                                              NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+                                              [defaults setObject:res[@"result"][@"user"] forKey:@"user"];
+                                              [defaults setObject:res[@"result"][@"hostList"] forKey:@"hostList"];
+                                              //NSLog(@"%@",user);
+                                          }else{
+                                              dispatch_async(dispatch_get_main_queue(), ^{
+                                                  
+                                                  LoginViewController *loginVc = [[LoginViewController alloc]init];
+                                                  [self.navigationController setViewControllers:[[NSArray alloc]initWithObjects:loginVc, nil]];
+                                                    //[ViewUtil alertMsg:@"密码失效，请重新登录" inViewController:self.navigationController];
+                                              });
+                                              NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+                                              [defaults removeObjectForKey:@"user"];
+                                              [defaults synchronize];
+                                          }
+                                          
+                                      }
+                                      
+                                  }];
+    [task resume];
+
 }
 
 

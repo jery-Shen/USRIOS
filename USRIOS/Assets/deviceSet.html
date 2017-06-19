@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>修改设备参数</title>
+<link rel="stylesheet" type="text/css" href="css/weui.min.css">
+<style type="text/css">
+body {
+	background: #f8f8f8;
+}
+
+.weui-switch:checked {
+	border-color: #128bed;
+	background-color: #128bed;
+}
+
+.text_grey {
+	color: #999;
+}
+</style>
+</head>
+
+<body>
+	<div id="app">
+		<div class="weui-cells__title">温度参数</div>
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">当前温度</label>
+				</div>
+				<div class="weui-cell__bd text_grey">{{device.temp}}</div>
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">温度上限</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input v-model="device.tempUpLimit" class="weui-input"
+						type="number" pattern="[0-9]*">
+				</div>
+			</div>
+
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">温度下线</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input v-model="device.tempDownLimit" class="weui-input"
+						type="number" pattern="[0-9]*">
+				</div>
+			</div>
+		</div>
+
+		<div class="weui-cells__title">湿度参数</div>
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">当前湿度</label>
+				</div>
+				<div class="weui-cell__bd text_grey">{{device.hr}}</div>
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">湿度上限</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input v-model="device.hrUpLimit" class="weui-input" type="number"
+						pattern="[0-9]*">
+				</div>
+			</div>
+
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">湿度下线</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input v-model="device.hrDownLimit" class="weui-input"
+						type="number" pattern="[0-9]*">
+				</div>
+			</div>
+		</div>
+
+		<div class="weui-cells__title">压差参数</div>
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">当前压差</label>
+				</div>
+				<div class="weui-cell__bd text_grey">{{device.dp}}</div>
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">压差上限</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input v-model="device.dpUpLimit" class="weui-input" type="number"
+						pattern="[0-9]*">
+				</div>
+			</div>
+
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">压差下线</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input v-model="device.dpDownLimit" class="weui-input"
+						type="number" pattern="[0-9]*">
+				</div>
+			</div>
+		</div>
+
+		<div class="weui-cells__title">报警参数</div>
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell weui-cell_switch">
+				<div class="weui-cell__bd">温度报警开关</div>
+				<div class="weui-cell__ft">
+					<input v-model="device.tempAlarm" class="weui-switch"
+						type="checkbox">
+				</div>
+			</div>
+			<div class="weui-cell weui-cell_switch">
+				<div class="weui-cell__bd">湿度报警开关</div>
+				<div class="weui-cell__ft">
+					<input v-model="device.hrAlarm" class="weui-switch"
+						type="checkbox">
+				</div>
+			</div>
+			<div class="weui-cell weui-cell_switch">
+				<div class="weui-cell__bd">压差报警开关</div>
+				<div class="weui-cell__ft">
+					<input v-model="device.dpAlarm" class="weui-switch"
+						type="checkbox">
+				</div>
+			</div>
+			<div class="weui-cell weui-cell_switch">
+				<div class="weui-cell__bd">自动风量报警开关</div>
+				<div class="weui-cell__ft">
+					<input v-model="device.inWindAlarm" class="weui-switch"
+						type="checkbox">
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+
+
+	<script src="js/vue.min.js"></script>
+	<script src="js/vue-resource.min.js"></script>
+<script type="text/javascript">
+var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1700,"airSpeed16":1800,"airSpeed18":1900,"airSpeed20":2000,"airSpeed22":2100,"airSpeed24":2200,"airSpeed26":2300,"airSpeed28":2400,"airSpeed30":2500,"airSpeed35":2600,"airSpeed40":2800,"airSpeed45":3000,"airSpeed50":3500,"akpMode":0,"alarmCycle":16,"areaId":0,"communicateFalse":5061,"communicateTrue":0,"converterMax":0,"converterMin":5,"converterModel":1,"cycleError":1,"deviceId":2,"dp":125,"dpAlarmClose":0,"dpDownLimit":0,"dpOff":0,"dpReally":165,"dpTarget":20,"dpUpLimit":125,"hr":63,"hrAlarmClose":0,"hrDownLimit":0,"hrOff":0,"hrReally":63,"hrUpLimit":88,"iD":0,"inWindAlarmClose":0,"inWindSpeed":4100,"infoBar":10,"online":1,"outWindSpeed":2200,"stateSwitch":2,"temp":15,"tempAlarmClose":0,"tempDownLimit":0,"tempOff":0,"tempReally":15,"tempUpLimit":25,"updateTime":"2017年4月2日 下午4:54:10","workHour":10,"workMode":0,"workSecond":980}';
+
+	function onData(data){
+		device = extendCopy(formatDevice(JSON.parse(data)));
+	    app.device = formatDevice(JSON.parse(data));
+	}
+	
+	function saveDevice(){
+		document.activeElement.blur();
+		setTimeout(function(){
+			app.saveDevice();
+		},350);
+	}
+
+	var device;
+	var app = new Vue({
+
+		created : function() {
+			var that = this;
+	        //this.device = formatDevice(JSON.parse(dataStr));
+		},
+		data : {
+			device : {}
+		},
+		methods:{
+			saveDevice:function(){
+				var param = {};
+				if(this.device.tempUpLimit!=device.tempUpLimit){
+					param.tempUpLimit = this.device.tempUpLimit;
+				}
+				if(this.device.tempDownLimit!=device.tempDownLimit){
+					param.tempDownLimit = this.device.tempDownLimit;
+				}
+				if(this.device.hrUpLimit!=device.hrUpLimit){
+					param.hrUpLimit = this.device.hrUpLimit;
+				}
+				if(this.device.hrDownLimit!=device.hrDownLimit){
+					param.hrDownLimit = this.device.hrDownLimit;
+				}
+				if(this.device.dpUpLimit!=device.dpUpLimit){
+					param.dpUpLimit = this.device.dpUpLimit;
+				}
+				if(this.device.dpDownLimit!=device.dpDownLimit){
+					param.dpDownLimit = this.device.dpDownLimit;
+				}
+				if(this.device.tempAlarm!=device.tempAlarm){
+					param.tempAlarmClose = Number(!this.device.tempAlarmClose);
+				}
+				if(this.device.hrAlarm!=device.hrAlarm){
+					param.hrAlarmClose = Number(!this.device.hrAlarmClose);
+				}
+				if(this.device.dpAlarm!=device.dpAlarm){
+					param.dpAlarmClose = Number(!this.device.dpAlarmClose);
+				}
+				if(this.device.inWindAlarm!=device.inWindAlarm){
+					param.inWindAlarmClose = Number(!this.device.inWindAlarmClose);
+				}
+				if(!isEmptyObject(param)){
+					param.areaId = this.device.areaId;
+					param.deviceId = this.device.deviceId;
+					console.info(JSON.stringify(param));
+					
+					window.JsBridge.updateDevice(JSON.stringify(param));
+					
+					/* window.JsBridge.showLoading();
+					var that = this;
+		            that.$http.post('http://usr.lightxx.cn/UpdateDevice',param,{emulateJSON:true,headers:{'Content-Type':'application/x-www-form-urlencoded'}}).then(function(res){
+		                if(res.body.status==200){
+		                    window.JsBridge.saveSuccess();
+		                }else{
+		                	window.JsBridge.saveError(res.body.error);
+		                }
+		            }); */
+		            
+		            
+				}else{
+					window.JsBridge.noChange();
+				}
+			}
+		}
+	}).$mount('#app');
+
+	function getQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null)
+			return decodeURIComponent(r[2]);
+		return 0;
+	}
+	
+	function extendCopy(p) {
+	　　　　var c = {};
+	　　　　for (var i in p) { 
+	　　　　　　c[i] = p[i];
+	　　　　}
+	　　　　c.uber = p;
+	　　　　return c;
+	　}
+	
+	function isEmptyObject(e) {  
+	    var t;  
+	    for (t in e)  
+	        return !1;  
+	    return !0  
+	}
+	
+	function formatDevice(device) {
+    	switch (device.infoBar) {
+    	case 0:
+    		device.infoBarStr = '待机状态，按开启键启动';
+    		break;
+    	case 1:
+    		device.infoBarStr = '工作正常，按关闭键停止';
+    		break;
+    	case 2:
+    		device.infoBarStr = '温度过低';
+    		break;
+    	case 3:
+    		device.infoBarStr = '断电报警';
+    		break;
+    	case 4:
+    		device.infoBarStr = '温度超高';
+    		break;
+    	case 5:
+    		device.infoBarStr = '温度过低';
+    		break;
+    	case 6:
+    		device.infoBarStr = '湿度超高';
+    		break;
+    	case 7:
+    		device.infoBarStr = '湿度过低';
+    		break;
+    	case 8:
+    		device.infoBarStr = '压差过高';
+    		break;
+    	case 9:
+    		device.infoBarStr = '压差过低';
+    		break;
+    	case 10:
+    		device.infoBarStr = '模拟量采集通讯故障';
+    		break;
+    	case 11:
+    		device.infoBarStr = '进风自动调节上限';
+    		break;
+    	case 12:
+    		device.infoBarStr = '进风自动调节下限';
+    		break;
+    	case 13:
+    		device.infoBarStr = '模拟量采集通讯故障';
+    		break;
+
+    	}
+
+    	device.onlineStr = device.online ? '是' : '否';
+    	device.communicateFalseStr = (device.communicateFalse == 0) ? '-'
+    			: device.communicateFalse + '次';
+    	device.communicateTrueStr = (device.communicateTrue == 0) ? '-'
+    			: device.communicateTrue + '次';
+    	device.akpModeStr = device.akpMode ? '正压' : '负压';
+    	device.converterModelStr = device.converterModel ? '西特263' : '上海森创';
+
+    	device.stateSwitchStr = device.stateSwitch ? '关' : '开';
+    	device.tempAlarmCloseStr = device.tempAlarmClose ? '关' : '开';
+    	device.hrAlarmCloseStr = device.hrAlarmClose ? '关' : '开';
+    	device.dpAlarmCloseStr = device.dpAlarmClose ? '关' : '开';
+    	device.inWindAlarmCloseStr = device.inWindAlarmClose ? '关' : '开';
+    	device.workTime = device.workHour + '小时'
+    			+ (device.workSecond / 60).toFixed(0) + '分钟'
+    			+ (device.workSecond % 60) + "秒";
+
+    	device.tempAlarm = !device.tempAlarmClose;
+    	device.hrAlarm = !device.hrAlarmClose;
+    	device.dpAlarm = !device.dpAlarmClose;
+    	device.inWindAlarm = !device.inWindAlarmClose;
+
+    	device.inWindSpeed = (device.inWindSpeed / 100).toFixed(2);
+    	device.outWindSpeed = (device.outWindSpeed / 100).toFixed(2);
+    	device.airSpeed10 = (device.airSpeed10 / 100).toFixed(2);
+    	device.airSpeed12 = (device.airSpeed12 / 100).toFixed(2);
+    	device.airSpeed14 = (device.airSpeed14 / 100).toFixed(2);
+    	device.airSpeed16 = (device.airSpeed16 / 100).toFixed(2);
+    	device.airSpeed18 = (device.airSpeed18 / 100).toFixed(2);
+    	device.airSpeed20 = (device.airSpeed20 / 100).toFixed(2);
+    	device.airSpeed22 = (device.airSpeed22 / 100).toFixed(2);
+    	device.airSpeed24 = (device.airSpeed24 / 100).toFixed(2);
+    	device.airSpeed26 = (device.airSpeed26 / 100).toFixed(2);
+    	device.airSpeed28 = (device.airSpeed28 / 100).toFixed(2);
+    	device.airSpeed30 = (device.airSpeed30 / 100).toFixed(2);
+    	device.airSpeed35 = (device.airSpeed35 / 100).toFixed(2);
+    	device.airSpeed40 = (device.airSpeed40 / 100).toFixed(2);
+    	device.airSpeed45 = (device.airSpeed45 / 100).toFixed(2);
+    	device.airSpeed50 = (device.airSpeed50 / 100).toFixed(2);
+    	return device;
+    }
+	
+
+
+</script>
+</body>
+</html>

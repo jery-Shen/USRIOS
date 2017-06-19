@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>设备详情</title>
+	<link rel="stylesheet" type="text/css" href="css/weui.min.css">
+<style type="text/css">
+body{
+	background: #f8f8f8;
+}
+.head{
+    color: #fff;
+    padding: 15px 15px;
+    right: 0px;
+    left: 0px;
+    top: 0px;
+    position: fixed;
+    z-index: 999;
+}
+
+.head .logo{
+    text-align: center;
+}
+.head .logo img{
+    width: 65px;
+}
+
+
+
+.infoBar{
+	height:42px;
+	margin-top:15px;
+    text-align: center;
+    width: 100%;
+    font-weight: bolder;
+    font-size: 16px;
+    
+}
+.updateTime{
+    margin-top: -10px;
+    font-size: 10px;
+    float: right;
+    color: #ddd;
+}
+.nav-tab{
+    height: 30px;
+    width: 100%;
+    padding: 5px 0px;
+    border-bottom: solid 1px #ddd;
+    background: #fff;
+    position: fixed;
+    top: 165px;
+    z-index: 999;
+}
+.nav-tab:after{
+    content:".";display:block;height:0;clear:both;visibility:hidden
+}
+.nav-tab a{
+    display: block;
+    float: left;
+    width: 33.3%;
+    text-align: center;
+    line-height: 30px;
+    position: relative;
+    color: #666;
+}
+.nav-tab a:not(:last-child):after{
+    content: '';
+    height: 100%;
+    right: 0px;
+    position: absolute;
+    vertical-align: middle;
+    border-right: 1px solid #ddd;
+}
+.nav-tab a.active{
+    color: #128bed;
+}
+.tabs{
+    margin-top: 220px;
+}
+.common{
+    margin-top: 20px;
+    padding: 15px;
+}
+
+.item{
+
+    font-size: 13px;
+    float: left;
+}
+
+.data{
+    position: relative;
+}
+.common .data span{
+    position: absolute;
+    left: 75px !important;
+
+}
+.wrape{
+    padding: 10px 15px;
+    border-top: solid 1px #ddd;
+    border-bottom: solid 1px #ddd;
+    margin-top: 10px;
+    background: #fff;
+}
+
+.list{
+    margin-top: 10px;
+    overflow: hidden;
+    width: 100%;
+    background: #fff;
+}
+.list-title{
+    padding: 5px 15px;
+    color: #333;
+}
+.list-body{
+    border-top: solid 1px #ddd;
+}
+.list-body .data {
+    font-size: 14px;
+    padding: 10px 15px;
+    border-bottom: solid 1px #ddd;
+    border-right: solid 1px #ddd;
+}
+.base .data span{
+    position: absolute;
+    left: 135px;
+}
+.sys .data span{
+    position: absolute;
+    left: 135px;
+}
+
+.alarm .data{
+    font-size: 14px;
+}
+.alarm .data span{
+    position: absolute;
+    left: 160px;
+}
+
+.air .data{
+    font-size: 12px;
+}
+.air .data span{
+    position: absolute;
+    left: 50px;
+}
+
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
+.clearfix{*+height:1%;}
+.col4{
+    width: 25%;
+}
+.col3{
+    width: 33.3%;
+}
+.col2{
+    width: 50%;
+}
+.col1{
+    width: 100%;
+}
+
+.text-primary{
+    color: #128bed; 
+}
+
+.text-success{
+    color: #1aad19;
+}
+
+.text-error{
+    color: #e64340;
+}
+.text-disabled{
+    color: #cccccc;
+}
+
+.bg-primary{
+    background: #128bed; 
+}
+
+.bg-warn{
+    background: #e64340; 
+}
+
+.bg-success{
+    background: #1aad19; 
+}
+
+.bg-disable{
+    background: #aaaaaa; 
+}
+
+
+
+</style>
+</head>
+
+<body>
+
+
+
+<div id="app">
+    <div class="head" :class="headBg">
+        <p class="logo"><img src="img/logo_white.png"></p>
+        <div class="infoBar">{{device.infoBarStr}}</div>
+        <div class="updateTime">{{device.updateTime}}</div>
+    </div>
+    <div class="nav-tab">
+        <a :class="{'active': currentView=='base'}" @click="currentView='base'">基本信息</a>
+        <a :class="{'active': currentView=='sys'}" @click="currentView='sys'">系统参数</a>
+        <a :class="{'active': currentView=='his'}" @click="currentView='his'">历史数据</a>
+    </div>
+
+    <div class="tabs">
+        <div v-show="currentView=='base'" class="base">
+            <div class="wrape">
+                <div id="myChart" class="chart" style="height: 180px;width: 100%;" v-chart="myChart"></div>
+            </div>
+            
+            <div class="list">
+                 <div class="list-body">
+                    <!-- <div class="item col2"><div class="data">温度 <span>{{device.temp}}</span></div></div>
+                    <div class="item col2"><div class="data">温度上限 <span>{{device.tempUpLimit}}</span></div></div>
+                    <div class="item col2"><div class="data">温度下限 <span>{{device.tempDownLimit}}</span></div></div>
+                    <div class="item col2"><div class="data">温度偏差 <span>{{device.tempOff}}</span></div></div>
+
+                    <div class="item col2"><div class="data">湿度 <span>{{device.hr}}</span></div></div>
+                    <div class="item col2"><div class="data">湿度上限 <span>{{device.hrUpLimit}}</span></div></div>
+                    <div class="item col2"><div class="data">湿度下限 <span>{{device.hrDownLimit}}</span></div></div>
+                    <div class="item col2"><div class="data">湿度偏差 <span>{{device.hrOff}}</span></div></div>
+
+                    <div class="item col2"><div class="data">压差 <span>{{device.dp}}</span></div></div>
+                    <div class="item col2"><div class="data">压差上限 <span>{{device.dpUpLimit}}</span></div></div>
+                    <div class="item col2"><div class="data">压差下限 <span>{{device.dpDownLimit}}</span></div></div>
+                    <div class="item col2"><div class="data">压差偏差 <span>{{device.dpOff}}</span></div></div> -->
+                    
+                    <div class="item col2"><div class="data">压差目标值 <span>{{device.dpTarget}}</span></div></div>
+                    <div class="item col2"><div class="data">换气次数 <span>{{device.airCount}}</span></div></div>
+                    <div class="item col2"><div class="data">进风变频速度 <span>{{device.inWindSpeed}}</span></div></div>
+                    <div class="item col2"><div class="data">出风变频速度 <span>{{device.outWindSpeed}}</span></div></div>
+                    <div class="item col2"><div class="data">控制模式 <span>{{device.workModeStr}}</span></div></div>
+                    <div class="item col2"><div class="data">通讯连续错误 <span>{{device.communicateTrueStr}}</span></div></div>
+                    
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            
+            
+           
+        </div>
+
+        <div v-show="currentView=='sys'" class="sys">
+            
+            <div class="list">
+                <div class="list-body">
+                    <div class="item col1"><div class="data">累计工作时间 <span>{{device.workTime}}</span></div></div>
+                    
+                    <div class="item col1"><div class="data">正负压模式 <span>{{device.akpModeStr}}</span></div></div>
+                    <div class="item col1"><div class="data">压差传感器型号 <span>{{device.converterModelStr}}</span></div></div>
+             </div>
+            </div>
+
+            <div class="list">
+                <div class="list-body">
+                    <div class="item col2"><div class="data">变频器连续最高 <span>{{device.converterMax}}</span></div></div>
+                    <div class="item col2"><div class="data">变频器连续最低 <span>{{device.converterMin}}</span></div></div>
+
+                    <div class="item col2"><div class="data">延周期检错 <span>{{device.cycleError}}</span></div></div>
+                    <div class="item col2"><div class="data">连续报警周期数 <span>{{device.alarmCycle}}</span></div></div>
+
+                    <div class="item col2"><div class="data">温度报警关闭 <span>{{device.tempAlarmCloseStr}}</span></div></div>
+                    <div class="item col2"><div class="data">湿度报警关闭 <span>{{device.hrAlarmCloseStr}}</span></div></div>
+                    <div class="item col2"><div class="data">压差报警关闭 <span>{{device.dpAlarmCloseStr}}</span></div></div>
+                    <div class="item col2"><div class="data">进风报警关闭 <span>{{device.inWindAlarmCloseStr}}</span></div></div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            
+        </div>
+
+        <div v-show="currentView=='his'" class="his">
+            
+            <div class="list alarm">
+                <div class="list-title">历史报警</div>
+                <div class="list-body">
+                    <div class="item col1"><div class="data">2017-03-01 04:54:32 <span>断电报警</span></div></div>
+                    <div class="item col1"><div class="data">2017-03-12 14:54:12 <span>温度超高,当前26大于上限25</span></div></div>
+                    <div class="item col1"><div class="data">2017-03-13 04:55:22 <span>模拟量采集通讯故障</span></div></div>
+                    <div class="item col1"><div class="data">2017-04-12 05:24:48 <span>断电报警</span></div></div>
+                    <div class="item col1"><div class="data">2017-04-02 11:54:26 <span>断电报警</span></div></div>
+                    <div class="item col1"><div class="data">2017-05-02 08:54:41 <span>温度超高,当前28大于上限25</span></div></div>
+                   
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+
+            <div class="list air">
+                <div class="list-title">换气速度</div>
+                <div class="list-body">
+                    <div class="item col4"><div class="data">10次: <span>{{device.airSpeed10}}</span></div></div>
+                    <div class="item col4"><div class="data">12次: <span>{{device.airSpeed12}}</span></div></div>
+                    <div class="item col4"><div class="data">14次: <span>{{device.airSpeed14}}</span></div></div>
+                    <div class="item col4"><div class="data">16次: <span>{{device.airSpeed16}}</span></div></div>
+                    <div class="item col4"><div class="data">18次: <span>{{device.airSpeed18}}</span></div></div>
+                    <div class="item col4"><div class="data">20次: <span>{{device.airSpeed20}}</span></div></div>
+                    <div class="item col4"><div class="data">22次: <span>{{device.airSpeed22}}</span></div></div>
+                    <div class="item col4"><div class="data">24次: <span>{{device.airSpeed24}}</span></div></div>
+                    <div class="item col4"><div class="data">26次: <span>{{device.airSpeed26}}</span></div></div>
+                    <div class="item col4"><div class="data">28次: <span>{{device.airSpeed28}}</span></div></div>
+                    <div class="item col4"><div class="data">30次: <span>{{device.airSpeed30}}</span></div></div>
+                    <div class="item col4"><div class="data">35次: <span>{{device.airSpeed35}}</span></div></div>
+                    <div class="item col4"><div class="data">40次: <span>{{device.airSpeed40}}</span></div></div>
+                    <div class="item col4"><div class="data">45次: <span>{{device.airSpeed45}}</span></div></div>
+                    <div class="item col4"><div class="data">50次: <span>{{device.airSpeed50}}</span></div></div>
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+            
+        </div>
+
+    </div>
+   
+</div>
+
+
+<!-- <div class="weui_btn_area">
+    <a class="weui_btn weui_btn_primary" href="javascript:" id="showTooltips">操作</a>
+</div> -->
+
+<script src="js/vue.min.js"></script>
+<script src="js/vue-resource.min.js"></script>
+<script src="js/echarts.min.js"></script>
+<script type="text/javascript">
+var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1700,"airSpeed16":1800,"airSpeed18":1900,"airSpeed20":2000,"airSpeed22":2100,"airSpeed24":2200,"airSpeed26":2300,"airSpeed28":2400,"airSpeed30":2500,"airSpeed35":2600,"airSpeed40":2800,"airSpeed45":3000,"airSpeed50":3500,"akpMode":0,"alarmCycle":16,"areaId":0,"communicateFalse":5061,"communicateTrue":0,"converterMax":0,"converterMin":5,"converterModel":1,"cycleError":1,"deviceId":2,"dp":125,"dpAlarmClose":0,"dpDownLimit":0,"dpOff":0,"dpReally":165,"dpTarget":20,"dpUpLimit":125,"hr":63,"hrAlarmClose":0,"hrDownLimit":0,"hrOff":0,"hrReally":63,"hrUpLimit":88,"iD":0,"inWindAlarmClose":0,"inWindSpeed":4100,"infoBar":1,"online":1,"outWindSpeed":2200,"stateSwitch":2,"temp":15,"tempAlarmClose":0,"tempDownLimit":0,"tempOff":0,"tempReally":15,"tempUpLimit":25,"updateTime":"2017年4月2日 下午4:54:10","workHour":10,"workMode":0,"workSecond":980}';
+
+	function onData(data){
+        app.device = formatDevice(JSON.parse(data));
+		
+	}
+	var app = new Vue({
+        created:function(){
+        	var that = this;
+            //this.device = formatDevice(JSON.parse(dataStr));
+            setTimeout(function() {
+                that.myChart = echarts.init(document.getElementById('myChart'));
+                that.drawChart()
+            }, 350);
+            
+            
+        },
+        data: {
+            currentView: 'base',
+            deviceId:1,
+            device:{},
+            myChart:{},
+            headBg:''
+        },
+        watch:{
+            'device.temp':'valueChange',
+            'device.hr':'valueChange',
+            'device.dp':'valueChange',
+            'device.inWindSpeed':'valueChange',
+            'device.outWindSpeed':'valueChange',
+            'device.infoBar':function(newVal,oldVal){
+            	if(newVal==0){
+                    this.headBg = 'bg-disable';
+                }else if(newVal==1){
+                    this.headBg = 'bg-primary';
+                }else{
+                    this.headBg = 'bg-warn';
+                }
+            }
+        },
+        methods:{
+            valueChange:function(newVal,oldVal){
+                if(oldVal){
+                    this.drawChart()
+                }
+            },
+            drawChart:function(){
+                var that = this;
+                var option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        },
+                        formatter: function (params, ticket, callback) {
+                            if(params[0].axisValue=='温度'){
+                                return '当前温度：'+that.device.temp+'<br>'
+                                +'温度上限：'+that.device.tempUpLimit+'<br>'
+                                +'温度下限：'+that.device.tempDownLimit;
+                            }else if(params[0].axisValue=='湿度'){
+                                return '当前湿度：'+that.device.hr+'<br>'
+                                +'湿度上限：'+that.device.hrUpLimit+'<br>'
+                                +'湿度下限：'+that.device.hrDownLimit;
+                            }else if(params[0].axisValue=='压差'){
+                                return '当前压差：'+that.device.dp+'<br>'
+                                +'压差上限：'+that.device.dpUpLimit+'<br>'
+                                +'压差下限：'+that.device.dpDownLimit;
+                            }else if(params[0].axisValue=='进风风速'){
+                                return '进风风速：'+that.device.inWindSpeed;
+                            }else if(params[0].axisValue=='出风风速'){
+                                return '出风风速：'+that.device.outWindSpeed;
+                            }else{
+                                return '未知';
+                            }
+                            console.info(params[0].axisValue);
+                            
+                        }
+                    },
+                    color:['#128bed'],
+                    grid: {
+                        top : '2%',
+                        left: '-48px',
+                        right: '8%',
+                        bottom: '-10%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        show:false,
+                    },
+                    yAxis: {
+                        type: 'category',
+                        axisLine:{
+                            show:false
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        axisLabel:{
+                            margin:58,
+                            textStyle:{
+                                color:'#333',
+                                align:'left'
+                            },
+                        },
+                        //data: ['出风风速','进风风速','压差下限','压差上限','压差','湿度下限','湿度上限','湿度','温度下限','温度上限','温度']
+                        data: ['出风风速','进风风速','压差','湿度','温度']
+                    },
+                    series: [{
+
+                            type: 'bar',
+                            barWidth:20,
+                            label:{
+                                normal:{
+                                    show: true,
+                                    position: 'right',
+                                    textStyle:{
+                                        color:'#333',
+                                    },
+                                }
+                            },
+                            //data: [this.device.outWindSpeed, this.device.inWindSpeed, this.device.dpDownLimit, this.device.dpUpLimit, this.device.dp, this.device.hrDownLimit, this.device.hrUpLimit, this.device.hr, this.device.tempDownLimit, this.device.tempUpLimit, this.device.temp]
+                            data: [this.device.outWindSpeed, this.device.inWindSpeed, this.device.dp,this.device.hr, this.device.temp]
+                        }
+                    ]
+                };
+                this.myChart.setOption(option);
+            }
+        }
+	}).$mount('#app');
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURIComponent(r[2]); return 0;
+    }
+
+    function formatDevice(device) {
+    	switch (device.infoBar) {
+    	case 0:
+    		device.infoBarStr = '待机状态，按开启键启动';
+    		break;
+    	case 1:
+    		device.infoBarStr = '工作正常，按关闭键停止';
+    		break;
+    	case 2:
+    		device.infoBarStr = '温度过低';
+    		break;
+    	case 3:
+    		device.infoBarStr = '断电报警';
+    		break;
+    	case 4:
+    		device.infoBarStr = '温度超高';
+    		break;
+    	case 5:
+    		device.infoBarStr = '温度过低';
+    		break;
+    	case 6:
+    		device.infoBarStr = '湿度超高';
+    		break;
+    	case 7:
+    		device.infoBarStr = '湿度过低';
+    		break;
+    	case 8:
+    		device.infoBarStr = '压差过高';
+    		break;
+    	case 9:
+    		device.infoBarStr = '压差过低';
+    		break;
+    	case 10:
+    		device.infoBarStr = '模拟量采集通讯故障';
+    		break;
+    	case 11:
+    		device.infoBarStr = '进风自动调节上限';
+    		break;
+    	case 12:
+    		device.infoBarStr = '进风自动调节下限';
+    		break;
+    	case 13:
+    		device.infoBarStr = '模拟量采集通讯故障';
+    		break;
+
+    	}
+		
+    	device.workModeStr = device.workMode ? '自动' : '手动';
+    	device.onlineStr = device.online ? '是' : '否';
+    	device.communicateFalseStr = (device.communicateFalse == 0) ? '-'
+    			: device.communicateFalse + '次';
+    	device.communicateTrueStr = (device.communicateTrue == 0) ? '-'
+    			: device.communicateTrue + '次';
+    	device.akpModeStr = device.akpMode ? '正压' : '负压';
+    	device.converterModelStr = device.converterModel ? '西特263' : '上海森创';
+
+    	device.stateSwitchStr = device.stateSwitch ? '关' : '开';
+    	device.tempAlarmCloseStr = device.tempAlarmClose ? '关' : '开';
+    	device.hrAlarmCloseStr = device.hrAlarmClose ? '关' : '开';
+    	device.dpAlarmCloseStr = device.dpAlarmClose ? '关' : '开';
+    	device.inWindAlarmCloseStr = device.inWindAlarmClose ? '关' : '开';
+    	device.workTime = device.workHour + '小时'
+    			+ (device.workSecond / 60).toFixed(0) + '分钟'
+    			+ (device.workSecond % 60) + "秒";
+
+    	device.tempAlarm = !device.tempAlarmClose;
+    	device.hrAlarm = !device.hrAlarmClose;
+    	device.dpAlarm = !device.dpAlarmClose;
+    	device.inWindAlarm = !device.inWindAlarmClose;
+
+    	device.inWindSpeed = (device.inWindSpeed / 100).toFixed(2);
+    	device.outWindSpeed = (device.outWindSpeed / 100).toFixed(2);
+    	device.airSpeed10 = (device.airSpeed10 / 100).toFixed(2);
+    	device.airSpeed12 = (device.airSpeed12 / 100).toFixed(2);
+    	device.airSpeed14 = (device.airSpeed14 / 100).toFixed(2);
+    	device.airSpeed16 = (device.airSpeed16 / 100).toFixed(2);
+    	device.airSpeed18 = (device.airSpeed18 / 100).toFixed(2);
+    	device.airSpeed20 = (device.airSpeed20 / 100).toFixed(2);
+    	device.airSpeed22 = (device.airSpeed22 / 100).toFixed(2);
+    	device.airSpeed24 = (device.airSpeed24 / 100).toFixed(2);
+    	device.airSpeed26 = (device.airSpeed26 / 100).toFixed(2);
+    	device.airSpeed28 = (device.airSpeed28 / 100).toFixed(2);
+    	device.airSpeed30 = (device.airSpeed30 / 100).toFixed(2);
+    	device.airSpeed35 = (device.airSpeed35 / 100).toFixed(2);
+    	device.airSpeed40 = (device.airSpeed40 / 100).toFixed(2);
+    	device.airSpeed45 = (device.airSpeed45 / 100).toFixed(2);
+    	device.airSpeed50 = (device.airSpeed50 / 100).toFixed(2);
+    	return device;
+    }
+</script>
+</body>
+</html>

@@ -9,9 +9,11 @@
 #import "LoginViewController.h"
 #import "DeviceListViewController.h"
 #import "MBProgressHUD.h"
+#import "HttpUtil.h"
+#import "ViewUtil.h"
 
 @interface LoginViewController()<UITextFieldDelegate>
-
+@property(nonatomic,retain) MBProgressHUD *hud;
 
 @end
 
@@ -45,9 +47,9 @@
     
     [textfieldName setValue:[NSNumber numberWithInt:12] forKey:@"paddingLeft"];
     textfieldName.placeholder = @"用户名";
-    textfieldName.keyboardType =  UIKeyboardTypeASCIICapable;
+    textfieldName.keyboardType =  UIKeyboardTypeAlphabet;
     textfieldName.autocorrectionType = UITextAutocorrectionTypeNo;
-    
+    textfieldName.autocapitalizationType = UITextAutocapitalizationTypeNone;
     
     textfieldName.returnKeyType = UIReturnKeyNext;
     textfieldName.tag = 11;
@@ -93,6 +95,9 @@
     [gobutton addTarget:self action:@selector(goButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:gobutton];
     
+    
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
@@ -111,32 +116,59 @@
 - (void)goButtonPressed:(UIButton *)sender{
     UITextField *name = (UITextField *)[self.view viewWithTag:11];
     UITextField *passworld = (UITextField *)[self.view viewWithTag:10];
-    if ([name.text isEqualToString:@"111"] && [passworld.text isEqualToString:@"111"] ) {
-        //写一个延时方法
-        [self performSelector:@selector(loding) withObject:nil afterDelay:3];
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.mode = MBProgressHUDModeText;
-        hud.labelText = @"登录中...";
-        hud.mode = MBProgressHUDModeIndeterminate;
-        //hud.removeFromSuperViewOnHide = YES;
-        //[hud hide:YES afterDelay:3];
-        //[hud setHidden:YES];
+    if([name.text isEqualToString:@""] || [passworld.text isEqualToString:@""]){
+        [ViewUtil alertMsg:@"用户名密码不能为空" inViewController:self];
     }else{
-       UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"显示的标题" message:nil preferredStyle:UIAlertControllerStyleAlert];
-         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
-        [alertController addAction:cancelAction];
-        [self presentViewController:alertController animated:YES completion:nil];
+        
+        [self loginWithName:name.text andPwd:passworld.text];
     }
     //关闭键盘
     [name resignFirstResponder];
     [passworld resignFirstResponder];
 }
-//延时方法
-- (void)loding{
-    DeviceListViewController *devcieListVc = [[DeviceListViewController alloc] init];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    [self.navigationController setViewControllers:[[NSArray alloc]initWithObjects:devcieListVc, nil]];
+
+-(void)loginWithName:(NSString *)userName andPwd:(NSString *)userPwd{
+    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    self.hud.mode = MBProgressHUDModeText;
+    self.hud.labelText = @"登录中...";
+    self.hud.mode = MBProgressHUDModeIndeterminate;
+
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@Login",URL_PRE]];
+    NSString *postBody = [NSString stringWithFormat:@"userName=%@&userPwd=%@",userName,userPwd];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = [postBody dataUsingEncoding:NSUTF8StringEncoding];
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                            completionHandler:
+                                  ^(NSData *data, NSURLResponse *response, NSError *error) {
+                                      if(!error){
+                                          NSDictionary *res =   [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&error];
+                                          if([res[@"status"] intValue] == 200){
+                                              NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+                                              [defaults setObject:res[@"result"][@"user"] forKey:@"user"];
+                                              [defaults setObject:res[@"result"][@"hostList"] forKey:@"hostList"];
+                                              dispatch_async(dispatch_get_main_queue(), ^{
+                                                  DeviceListViewController *devcieListVc = [[DeviceListViewController alloc] init];
+                                                  [self.navigationController setNavigationBarHidden:NO animated:NO];
+                                                  [self.navigationController setViewControllers:[[NSArray alloc]initWithObjects:devcieListVc, nil]];
+                                              });
+                                          }else{
+                                              [ViewUtil alertMsg:res[@"error"] inViewController:self];
+                                          }
+
+                                      }else{
+                                          [ViewUtil alertMsg:[NSString stringWithFormat:@"%@",error] inViewController:self];
+                                                                                }
+                                      dispatch_async(dispatch_get_main_queue(), ^{
+                                          [self.hud setHidden:YES];
+                                      });
+
+                                  }];
+    [task resume];
+
 }
+
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [self.view endEditing:YES];

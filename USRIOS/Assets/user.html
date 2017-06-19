@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>用户信息</title>
+<link rel="stylesheet" type="text/css" href="css/weui.min.css">
+<style type="text/css">
+body {
+	background: #f8f8f8;
+}
+
+</style>
+</head>
+
+<body>
+	<div id="app">
+
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">用户名</label>
+				</div>
+				<div class="weui-cell__bd">{{user.userName}}</div>
+			</div>
+			
+
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">姓名</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input v-model="user.name" class="weui-input"
+						type="text">
+				</div>
+			</div>
+
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">电话</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input v-model="user.phone" class="weui-input"
+						type="tel">
+				</div>
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">邮箱</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input v-model="user.email" class="weui-input"
+						type="email">
+				</div>
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">地址</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input v-model="user.address" class="weui-input"
+						type="text">
+				</div>
+			</div>
+		</div>
+
+		<div class="weui-cells">
+           
+            <a class="weui-cell weui-cell_access" href="javascript:;" @click="updatePwd()">
+                <div class="weui-cell__bd">
+                    <p>修改密码</p>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+        </div>
+
+		
+
+	</div>
+
+
+
+
+	<script src="js/vue.min.js"></script>
+	<script src="js/vue-resource.min.js"></script>
+<script type="text/javascript">
+function onData(data){
+	app.user = JSON.parse(data);
+}
+var app = new Vue({
+
+	created : function() {
+		var that = this;
+        //this.device = formatDevice(JSON.parse(dataStr));
+	},
+	data : {
+		user : {}
+	},
+	methods:{
+		save:function(){
+			
+		},
+		updatePwd:function(){
+			window.JsBridge.updatePwd();
+		}
+	}
+}).$mount('#app');
+
+</script>
+</body>
+</html>
