@@ -37,11 +37,19 @@
 - (void)initView{
     self.view.backgroundColor = [UIColor whiteColor];
     
+    UIImageView *bg = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"login_bg.jpg"]];
+    bg.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    [self.view addSubview:bg];
+    
+    UIImageView *title = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"title"]];
+    title.frame = CGRectMake(self.view.frame.size.width/2-140, 70, 280, 200);
+    [self.view addSubview:title];
+    
     UITextField *textfieldName = [[UITextField alloc]init];
     textfieldName.bounds = CGRectMake(0, 0, 280, 30);
     textfieldName.center = CGPointMake(self.view.frame.size.width/2,350);
     UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-    icon.image = [UIImage imageNamed:@"img"];
+    icon.image = [UIImage imageNamed:@"icon_user"];
     textfieldName.leftView =icon;
     textfieldName.leftViewMode = UITextFieldViewModeAlways;
     
@@ -50,6 +58,9 @@
     textfieldName.keyboardType =  UIKeyboardTypeAlphabet;
     textfieldName.autocorrectionType = UITextAutocorrectionTypeNo;
     textfieldName.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    [textfieldName setValue:[UIColor colorWithRed:1 green:1 blue:1 alpha:0.7] forKeyPath:@"_placeholderLabel.textColor"];
+    textfieldName.textColor = [ViewUtil colorHex:@"ffffff"];
+    textfieldName.tintColor = [ViewUtil colorHex:@"ffffff"];
     
     textfieldName.returnKeyType = UIReturnKeyNext;
     textfieldName.tag = 11;
@@ -59,7 +70,7 @@
     UIView *underline = [[UIView alloc] init];
     underline.bounds = CGRectMake(0, 0, 280, 0.5);
     underline.center = CGPointMake(self.view.frame.size.width/2,375);
-    underline.backgroundColor = [UIColor lightGrayColor];
+    underline.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.7];
     [self.view addSubview:underline];
     
     
@@ -70,11 +81,17 @@
     textfieldPassworld.placeholder = @"密码";
     textfieldPassworld.keyboardType =  UIKeyboardTypeASCIICapable;
     textfieldPassworld.secureTextEntry = YES;
+    [textfieldPassworld setValue:[UIColor colorWithRed:1 green:1 blue:1 alpha:0.7] forKeyPath:@"_placeholderLabel.textColor"];
+    textfieldPassworld.textColor = [ViewUtil colorHex:@"ffffff"];
+    textfieldPassworld.tintColor = [ViewUtil colorHex:@"ffffff"];
+   
+    
     
     UIImageView *icon2 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-    icon2.image = [UIImage imageNamed:@"img"];
+    icon2.image = [UIImage imageNamed:@"icon_pwd"];
     textfieldPassworld.leftView =icon2;
     textfieldPassworld.leftViewMode = UITextFieldViewModeAlways;
+    
     
     [textfieldPassworld setValue:[NSNumber numberWithInt:12] forKey:@"paddingLeft"];
     textfieldPassworld.delegate = self;
@@ -84,14 +101,23 @@
     UIView *underline2 = [[UIView alloc] init];
     underline2.bounds = CGRectMake(0, 0, 280, 0.5);
     underline2.center = CGPointMake(self.view.frame.size.width/2,435);
-    underline2.backgroundColor = [UIColor lightGrayColor];
+    underline2.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.7];
     [self.view addSubview:underline2];
     
-    UIButton *gobutton = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *gobutton = [UIButton buttonWithType:UIButtonTypeCustom];
     gobutton.tag = 9;
-    gobutton.bounds = CGRectMake(0, 0, 280, 30);
-    gobutton.center = CGPointMake(self.view.frame.size.width/2, 480);
+    gobutton.bounds = CGRectMake(0, 0, 240, 40);
+    gobutton.center = CGPointMake(self.view.frame.size.width/2, 500);
     [gobutton setTitle:@"登陆" forState:UIControlStateNormal];
+    
+    gobutton.layer.borderWidth = 1;
+    gobutton.layer.cornerRadius = 18;
+    gobutton.layer.backgroundColor = [[UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:0.1] CGColor];
+    gobutton.layer.borderColor = [[UIColor colorWithRed:1 green:1 blue:1 alpha:0.6] CGColor];
+    [gobutton setTitleColor:[ViewUtil colorHex:@"ffffff"]forState:UIControlStateNormal];
+
+    gobutton.titleLabel.textAlignment = NSTextAlignmentCenter;
+    
     [gobutton addTarget:self action:@selector(goButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:gobutton];
     

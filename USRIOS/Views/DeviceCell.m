@@ -50,19 +50,19 @@
     
     content =[[UILabel alloc] init];
     content.text = @"温度:15，湿度:25，压差:125";
-    content.textColor = [ViewUtil colorHex:@"666666"];
-    content.font = [UIFont systemFontOfSize:14];
-    content.frame = CGRectMake(15,65, screenWidth-30, 30);
+    content.textColor = [ViewUtil colorHex:@"555555"];
+    content.font = [UIFont systemFontOfSize:13];
+    content.frame = CGRectMake(15,65, screenWidth-20, 30);
     [self.contentView addSubview:content];
     
     des =[[UILabel alloc] init];
     des.text = @"换气期数:20.00，进风速度:19.20，目标压差:20";
-    des.textColor = [ViewUtil colorHex:@"666666"];
-    des.font = [UIFont systemFontOfSize:14];
-    des.frame = CGRectMake(15,95, screenWidth-30, 30);
+    des.textColor = [ViewUtil colorHex:@"555555"];
+    des.font = [UIFont systemFontOfSize:13];
+    des.frame = CGRectMake(15,95, screenWidth-20, 30);
     [self.contentView addSubview:des];
 
-    UIImageView *logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img.png"]];
+    UIImageView *logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo_blue"]];
     logo.frame = CGRectMake(15, 15, 40, 40);
     [self.contentView addSubview:logo];
     
