@@ -12,4 +12,5 @@
 @interface ViewUtil : NSObject
 +(UIColor *) colorHex: (NSString *) stringToConvert;
 +(void)alertMsg:(NSString *)msg inViewController:(UIViewController *)vc;
++(NSString *)stringOfInfoBar:(int)infoBar;
 @end

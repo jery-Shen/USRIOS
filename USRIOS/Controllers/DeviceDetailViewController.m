@@ -22,11 +22,9 @@
 }
 
 -(void)initView{
-    self.title = @"智控1";
+    self.title = [NSString stringWithFormat:@"智控%@",self.device[@"deviceId"]];
     self.view.backgroundColor = [ViewUtil colorHex:@"f8f8f8"];
     
-    self.navigationController.navigationBar.shadowImage = [UIImage new];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
     
     CGRect rx = [ UIScreen mainScreen ].bounds;
     CGFloat screenWidth = rx.size.width;
@@ -40,15 +38,15 @@
     [self.webView loadRequest:[NSURLRequest requestWithURL:filePath]];
     [self.view addSubview:self.webView];
     
+    //NSLog(@"%@",self.device);
     
     
-//    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];
-//    [btn setTitle:@"haha" forState:UIControlStateNormal];
-//    [btn addTarget:self action:@selector(myclick:) forControlEvents:UIControlEventTouchUpInside];
-//    [btn setTitleColor:[ViewUtil colorHex:@"128bed"] forState:UIControlStateNormal];
-//    [self.view addSubview:btn];
-    
-    
+}
+-(void)webViewDidFinishLoad:(UIWebView *)webView{
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self.device options:0 error:nil];
+    NSString *deviceStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSString *deviceStrZy = [deviceStr stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
+    [self.webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"javascript:onData('%@')",deviceStrZy]];
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
@@ -62,6 +60,25 @@
     
 }
 
+
+- (void)viewWillAppear:(BOOL)animated{
+    if([self.device[@"infoBar"] intValue]==0){
+        [self.navigationController.navigationBar setBarTintColor:[ViewUtil colorHex:@"aaaaaa"]];
+    }else if([self.device[@"infoBar"] intValue]==1){
+        [self.navigationController.navigationBar setBarTintColor:[ViewUtil colorHex:@"128bed"]];
+    }else{
+        [self.navigationController.navigationBar setBarTintColor:[ViewUtil colorHex:@"e64340"]];
+    }
+    self.navigationController.navigationBar.shadowImage = [UIImage new];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+    [super viewWillDisappear:animated];
+}
+
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [self.navigationController.navigationBar setBarTintColor:[ViewUtil colorHex:@"128bed"]];
+    [super viewWillDisappear:animated];
+}
 
 
 

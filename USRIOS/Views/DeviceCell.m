@@ -30,8 +30,8 @@
     title =[[UILabel alloc] init];
     title.text = @"智控1";
     title.textColor = [ViewUtil colorHex:@"333333"];
-    title.font = [UIFont systemFontOfSize:16];
-    title.frame = CGRectMake(60,15, 50, 30);
+    title.font = [UIFont systemFontOfSize:18];
+    title.frame = CGRectMake(60,22, 50, 30);
     [self.contentView addSubview:title];
     
     
@@ -41,11 +41,11 @@
     info.font = [UIFont systemFontOfSize:13];
     info.layer.borderWidth = 2;
     info.layer.borderColor = [[ViewUtil colorHex:@"128bed"] CGColor];
-    info.layer.cornerRadius = 12;
+    info.layer.cornerRadius = 8;
     info.textAlignment = NSTextAlignmentCenter;
     CGSize maximumLabelSize = CGSizeMake(60, 260);
     CGSize expectSize = [info sizeThatFits:maximumLabelSize];
-    info.frame = CGRectMake(113,13, expectSize.width+15, expectSize.height+8);
+    info.frame = CGRectMake(113,20, expectSize.width+15, expectSize.height+8);
     [self.contentView addSubview:info];
     
     content =[[UILabel alloc] init];

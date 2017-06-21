@@ -106,15 +106,16 @@
     
     UIButton *gobutton = [UIButton buttonWithType:UIButtonTypeCustom];
     gobutton.tag = 9;
-    gobutton.bounds = CGRectMake(0, 0, 240, 40);
+    gobutton.bounds = CGRectMake(0, 0, 280, 45);
     gobutton.center = CGPointMake(self.view.frame.size.width/2, 500);
     [gobutton setTitle:@"登陆" forState:UIControlStateNormal];
     
     gobutton.layer.borderWidth = 1;
-    gobutton.layer.cornerRadius = 18;
+    gobutton.layer.cornerRadius = 22.5;
     gobutton.layer.backgroundColor = [[UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:0.1] CGColor];
     gobutton.layer.borderColor = [[UIColor colorWithRed:1 green:1 blue:1 alpha:0.6] CGColor];
     [gobutton setTitleColor:[ViewUtil colorHex:@"ffffff"]forState:UIControlStateNormal];
+    [gobutton setTitleColor:[ViewUtil colorHex:@"eeeeee"]forState:UIControlStateHighlighted];
 
     gobutton.titleLabel.textAlignment = NSTextAlignmentCenter;
     

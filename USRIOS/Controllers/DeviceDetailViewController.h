@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface DeviceDetailViewController : UIViewController
-
+@property (strong, nonatomic) NSDictionary *device;
 @end

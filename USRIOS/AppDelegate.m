@@ -13,7 +13,7 @@
 #import "DeviceListViewController.h"
 #import "DeviceListWifiViewController.h"
 #import "HttpUtil.h"
-
+#import "OnlineService.h"
 
 @interface AppDelegate ()
 
@@ -25,6 +25,16 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [UINavigationBar appearance].barTintColor=[ViewUtil colorHex:@"128BED"];
+    
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        UIUserNotificationType type =  UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound;
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:type
+                                                                                 categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    }
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    
+    self.deviceList = [NSMutableArray arrayWithCapacity:50];
     
     self.navigationController = [[NavigationController alloc] init];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
@@ -46,14 +56,14 @@
             DeviceListWifiViewController *deviceWifiListVc = [[DeviceListWifiViewController alloc]init];
             [self.navigationController setViewControllers:[[NSArray alloc]initWithObjects:deviceWifiListVc, nil]];
         }
-        
-        NSLog(@"%@,%@",user[@"userName"],user[@"userPwd"]);
         [self loginWithName:user[@"userName"] andPwd:user[@"userPwd"]];
         
     }
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
+    
+    
     return YES;
 }
 
@@ -101,13 +111,19 @@
 
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+//    __block UIBackgroundTaskIdentifier bgTask;// 后台任务标识
+//    
+//    bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
+//        [application endBackgroundTask:bgTask];
+//        bgTask = UIBackgroundTaskInvalid;
+//    }];
+    
+    //[[OnlineService sharedInstance] console];
 }
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+    //[UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 }
 
 
@@ -119,6 +135,15 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    NSLog(@"*********notification:%@******************",notification.alertBody);
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    
+    //    [[NSNotificationCenter defaultCenter] postNotificationName:@"pushWebView" object:nil];
+    
+}
+
 
 
 @end

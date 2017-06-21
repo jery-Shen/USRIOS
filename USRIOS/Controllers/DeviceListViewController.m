@@ -13,6 +13,9 @@
 #import "DeviceDetailViewController.h"
 #import "NirKxMenu.h"
 #import "LoginViewController.h"
+#import "HttpUtil.h"
+#import "AppDelegate.h"
+#import "OnlineService.h"
 
 @interface DeviceListViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,retain) UITableView *tableView;
@@ -26,7 +29,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initView];
+    [self loadData];
+    //[self performSelector:@selector(loadData) withObject:nil afterDelay:1];
+    NSLog(@"viewDidLoad");
 }
+
+
 
 -(void)initView{
     self.title = @"智控列表";
@@ -39,23 +47,66 @@
     CGFloat screenWidth = rx.size.width;
     CGFloat screenHeight = rx.size.height;
     
-    self.loading =  [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0,0, 30, 30)];
-    self.loading.center = CGPointMake(self.view.center.x, self.view.center.y-50);
-    [self.loading setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
-    self.loading.hidden = NO;
-   // [self.loading startAnimating];
-    
-    self.loading.hidden = YES;
-    
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, screenHeight-64) style:UITableViewStylePlain];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.tableView];
+    
+    
+    self.loading =  [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0,0, 30, 30)];
+    self.loading.center = CGPointMake(self.view.center.x, self.view.center.y-50);
+    [self.loading setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
     [self.view addSubview:self.loading];
-
+    self.data = [NSMutableArray arrayWithCapacity:20];
 }
 
+-(void)loadData{
+    self.loading.hidden = NO;
+    [self.loading startAnimating];
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+    NSDictionary *user = [defaults objectForKey:@"user"];
+    NSDictionary *map = [HttpUtil getSign:user];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@GetDeviceListDao?areaId=%d&token=%@&timestamp=%@@&sign=%@",URL_PRE,[user[@"areaId"] intValue],map[@"token"],map[@"timestamp"],map[@"sign"]]];
+    //NSLog(@"%@",url);
+    NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:
+        ^(NSData *data, NSURLResponse *response, NSError *error) {
+            if(!error){
+                NSDictionary *res =   [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&error];
+                if([res[@"status"] intValue] == 200){
+                    NSArray *items = res[@"result"];
+                    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                    for(int i = 0; i < [items count]; i++)
+                    {
+                        [self.data addObject:items[i]];
+                        [appDelegate.deviceList addObject:items[i]];
+                        
+                    }
+                    
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.tableView reloadData];
+                    });
+                }else{
+                    [ViewUtil alertMsg:res[@"error"] inViewController:self];
+                }
+                
+            }else{
+                [ViewUtil alertMsg:[NSString stringWithFormat:@"%@",error] inViewController:self];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.loading.hidden = YES;
+                [self.loading stopAnimating];
+            });
+
+           
+            
+        }];
+    [task resume];
+
+}
 
 
 -(void)menu:(id)sender{
@@ -106,7 +157,7 @@
 }
 
 -(void)refresh{
-    
+    [self loadData];
 }
 
 -(void)instructe{
@@ -134,7 +185,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 2;
+    return self.data.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -147,7 +198,31 @@
     
     NSDictionary *item = self.data[indexPath.item];
     cell.tag = indexPath.item;
-   
+    cell.title.text = [NSString stringWithFormat:@"智控%d",[item[@"deviceId"] intValue]];
+    
+    int infoBar = [item[@"infoBar"] intValue];
+    cell.info.text = [ViewUtil stringOfInfoBar:infoBar];
+    if(infoBar==0){
+        cell.info.textColor = [ViewUtil colorHex:@"cccccc"];
+        cell.info.layer.borderColor = [[ViewUtil colorHex:@"cccccc"] CGColor];
+    }else if(infoBar==1){
+        cell.info.textColor = [ViewUtil colorHex:@"1aad19"];
+        cell.info.layer.borderColor = [[ViewUtil colorHex:@"1aad19"] CGColor];
+    }else{
+        cell.info.textColor = [ViewUtil colorHex:@"e64340"];
+        cell.info.layer.borderColor = [[ViewUtil colorHex:@"e64340"] CGColor];
+    }
+    if([item[@"online"] intValue] == 0){
+        cell.info.textColor = [ViewUtil colorHex:@"cccccc"];
+        cell.info.layer.borderColor = [[ViewUtil colorHex:@"cccccc"] CGColor];
+        cell.info.text = @"失去连接";
+    }
+    CGSize maximumLabelSize = CGSizeMake(60, 260);
+    CGSize expectSize = [cell.info sizeThatFits:maximumLabelSize];
+    cell.info.frame = CGRectMake(113,20, expectSize.width+15, expectSize.height+8);
+    cell.content.text = [NSString stringWithFormat:@"温度:%@，湿度:%@，压差:%@",item[@"temp"],item[@"hr"],item[@"dp"]];
+    cell.des.text = [NSString stringWithFormat:@"换气期数:%@，进风速度:%.2lf，目标压差:%@",item[@"airCount"],[item[@"inWindSpeed"] floatValue]/100,item[@"dpTarget"]];
+    
     return cell;
     
 }
@@ -159,6 +234,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     DeviceDetailViewController *deviceDetailVc = [[DeviceDetailViewController alloc] init];
+    deviceDetailVc.device = self.data[indexPath.item];
     [self.navigationController pushViewController:deviceDetailVc animated:YES];
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
 }
