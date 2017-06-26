@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina5_5" orientation="portrait">
+    <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -19,39 +17,19 @@
                         <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="04Z-1e-UL9">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="9mU-Hy-ZFw">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                                        <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="QG3-qh-v4T">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                                                <subviews>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash2.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="Ox1-5V-dbh">
-                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" secondItem="Ox1-5V-dbh" secondAttribute="height" multiplier="185:564" id="Fcl-1n-Gvf"/>
-                                                        </constraints>
-                                                    </imageView>
-                                                </subviews>
-                                            </stackView>
-                                        </subviews>
-                                    </stackView>
-                                </subviews>
-                            </stackView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="7CX-Ek-4pp">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="04Z-1e-UL9" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="CPi-0o-2yB"/>
-                            <constraint firstItem="04Z-1e-UL9" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="1" id="HXf-4b-r0t"/>
-                            <constraint firstAttribute="trailing" secondItem="04Z-1e-UL9" secondAttribute="trailing" id="bo8-qm-1ki"/>
-                            <constraint firstItem="04Z-1e-UL9" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="fGV-A7-d5K"/>
-                            <constraint firstItem="04Z-1e-UL9" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" constant="1" id="lFy-ke-ELh"/>
-                            <constraint firstAttribute="bottom" secondItem="04Z-1e-UL9" secondAttribute="bottom" id="xb8-6i-ZjT"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="7CX-Ek-4pp" secondAttribute="bottom" id="F06-0f-deG"/>
+                            <constraint firstAttribute="trailing" secondItem="7CX-Ek-4pp" secondAttribute="trailing" id="L8h-M4-UJI"/>
+                            <constraint firstItem="7CX-Ek-4pp" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="aRG-Id-Py4"/>
+                            <constraint firstItem="7CX-Ek-4pp" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="vvB-sx-n40"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -61,6 +39,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="splash2.jpg" width="1080" height="1920"/>
+        <image name="launch.jpg" width="1080" height="1920"/>
     </resources>
 </document>
