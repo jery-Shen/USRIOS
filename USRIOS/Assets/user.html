@@ -89,6 +89,7 @@ body {
 	<script src="js/vue-resource.min.js"></script>
 <script type="text/javascript">
 function onData(data){
+    console.info(JSON.parse(data));
 	app.user = JSON.parse(data);
 }
 var app = new Vue({
@@ -105,7 +106,8 @@ var app = new Vue({
 			
 		},
 		updatePwd:function(){
-			window.JsBridge.updatePwd();
+            window.location.href="objc://updatepwd";
+			//window.JsBridge.updatePwd();
 		}
 	}
 }).$mount('#app');

@@ -89,7 +89,7 @@
                                                   
                                                   LoginViewController *loginVc = [[LoginViewController alloc]init];
                                                   [self.navigationController setViewControllers:[[NSArray alloc]initWithObjects:loginVc, nil]];
-                                                    //[ViewUtil alertMsg:@"密码失效，请重新登录" inViewController:self.navigationController];
+                                                  [ViewUtil alertMsg:@"密码失效，请重新登录" inViewController:loginVc];
                                               });
                                               NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
                                               [defaults removeObjectForKey:@"user"];
@@ -105,25 +105,27 @@
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+    
 }
 
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
 //    __block UIBackgroundTaskIdentifier bgTask;// 后台任务标识
-//    
+//
 //    bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
 //        [application endBackgroundTask:bgTask];
 //        bgTask = UIBackgroundTaskInvalid;
 //    }];
-    
-    //[[OnlineService sharedInstance] console];
+//
+//    [[OnlineService sharedInstance] console];
 }
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     //[UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+    NSDictionary *user = [defaults objectForKey:@"user"];
+    [self loginWithName:user[@"userName"] andPwd:user[@"userPwd"]];
 }
 
 
@@ -140,8 +142,7 @@
     NSLog(@"*********notification:%@******************",notification.alertBody);
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
-    //    [[NSNotificationCenter defaultCenter] postNotificationName:@"pushWebView" object:nil];
-    
+    //[[NSNotificationCenter defaultCenter] postNotificationName:@"pushWebView" object:nil];
 }
 
 

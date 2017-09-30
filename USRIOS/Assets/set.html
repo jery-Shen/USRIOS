@@ -89,19 +89,24 @@ var app = new Vue({
 	},
 	methods:{
 		userInfo:function(){
-			window.JsBridge.userInfo();
+            window.location.href="objc://userinfo";
+			//window.JsBridge.userInfo();
 		},
 		host:function(){
-			window.JsBridge.host();
+            window.location.href="objc://host";
+			//window.JsBridge.host();
 		},
 		about:function(){
-			window.JsBridge.about();
+            window.location.href="objc://about";
+			//window.JsBridge.about();
 		},
 		help:function(){
-			window.JsBridge.help();
+            window.location.href="objc://help";
+			//window.JsBridge.help();
 		},
 		logout:function(){
-			window.JsBridge.logout();
+            window.location.href="objc://logout";
+			//window.JsBridge.logout();
 		}
 	}
 }).$mount('#app');

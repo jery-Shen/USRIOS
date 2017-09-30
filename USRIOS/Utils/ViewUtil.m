@@ -46,6 +46,16 @@
     [alertController addAction:cancelAction];
     [vc presentViewController:alertController animated:YES completion:nil];
 }
++(void)confirmMsg:(NSString *)msg inViewController:(UIViewController *)vc callback:(void(^)(void))callback{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:msg message:nil preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        callback();
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    [alertController addAction:okAction];
+    [alertController addAction:cancelAction];
+    [vc presentViewController:alertController animated:YES completion:nil];
+}
 +(NSString *)stringOfInfoBar:(int)infoBar{
     NSString *infoBarStr = @"";
     switch (infoBar) {

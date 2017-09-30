@@ -24,8 +24,7 @@
 -(void)initView{
     self.title = [NSString stringWithFormat:@"智控%@",self.device[@"deviceId"]];
     self.view.backgroundColor = [ViewUtil colorHex:@"f8f8f8"];
-    
-    
+
     CGRect rx = [ UIScreen mainScreen ].bounds;
     CGFloat screenWidth = rx.size.width;
     CGFloat screenHeight = rx.size.height;
@@ -37,6 +36,9 @@
     NSURL *filePath = [[NSBundle mainBundle] URLForResource:@"deviceDetail.html" withExtension:nil];
     [self.webView loadRequest:[NSURLRequest requestWithURL:filePath]];
     [self.view addSubview:self.webView];
+    if (@available(iOS 11.0, *)) {
+        self.webView.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    }
     
     //NSLog(@"%@",self.device);
     

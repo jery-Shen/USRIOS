@@ -16,6 +16,8 @@
 #import "HttpUtil.h"
 #import "AppDelegate.h"
 #import "OnlineService.h"
+#import "SetViewController.h"
+#import "WebViewController.h"
 
 @interface DeviceListViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,retain) UITableView *tableView;
@@ -42,6 +44,9 @@
     
     UIBarButtonItem *rightButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_btn"] style:UIBarButtonItemStyleDone target:self action:@selector(menu:)];
     self.navigationItem.rightBarButtonItem = rightButtonItem;
+    //self.navigationController.navigationBar.prefersLargeTitles = true;
+
+    
     
     CGRect rx = [ UIScreen mainScreen ].bounds;
     CGFloat screenWidth = rx.size.width;
@@ -52,7 +57,9 @@
     self.tableView.delegate = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.tableView];
-    
+    if (@available(iOS 11.0, *)) {
+        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    }
     
     self.loading =  [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0,0, 30, 30)];
     self.loading.center = CGPointMake(self.view.center.x, self.view.center.y-50);
@@ -77,16 +84,14 @@
                 NSDictionary *res =   [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&error];
                 if([res[@"status"] intValue] == 200){
                     NSArray *items = res[@"result"];
-                    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-                    for(int i = 0; i < [items count]; i++)
-                    {
-                        [self.data addObject:items[i]];
-                        [appDelegate.deviceList addObject:items[i]];
-                        
-                    }
-                    
-                    
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                        [self.data removeAllObjects];
+                        for(int i = 0; i < [items count]; i++)
+                        {
+                            [self.data addObject:items[i]];
+                            [appDelegate.deviceList addObject:items[i]];
+                        }
                         [self.tableView reloadData];
                     });
                 }else{
@@ -111,7 +116,7 @@
 
 -(void)menu:(id)sender{
     NSArray *menuItems =
-    @[[KxMenuItem menuItem:@"切换局域网"
+    @[[KxMenuItem menuItem:@"切换单机 "
                      image:[UIImage imageNamed:@"wv_change_black"]
                     target:self
                     action:@selector(line)],
@@ -132,7 +137,7 @@
         .arrowSize =  9,     //指示箭头大小
         .marginXSpacing= 7,  //MenuItem左右边距
         .marginYSpacing= 9,  //MenuItem上下边距
-        .intervalSpacing= 25,  //MenuItemImage与MenuItemTitle的间距
+        .intervalSpacing= 28,  //MenuItemImage与MenuItemTitle的间距
         .menuCornerRadius= 6.5,  //菜单圆角半径
         .maskToBackground= true,  //是否添加覆盖在原View上的半透明遮罩
         .shadowOfMenu= false,  //是否添加菜单阴影
@@ -142,10 +147,7 @@
         .menuBackgroundColor= {1,1,1}  //菜单的底色
 
     };
-    
-    [KxMenu showMenuInView:self.navigationController.view fromRect:CGRectMake([sender view].frame.origin.x, [sender view].frame.origin.y+25, [sender view].frame.size.width, [sender view].frame.size.height) menuItems:menuItems withOptions:opt];
-    
-  
+    [KxMenu showMenuInView:self.navigationController.view fromRect:CGRectMake(self.view.frame.size.width-55, self.view.frame.origin.y-50, [sender view].frame.size.width, [sender view].frame.size.height) menuItems:menuItems withOptions:opt];
 }
 
 -(void)line{
@@ -161,17 +163,13 @@
 }
 
 -(void)instructe{
-    
+    WebViewController *webVc = [[WebViewController alloc] initWithWidthTitle:@"使用说明" andUrl:@"instructe.html"];
+    [self.navigationController pushViewController:webVc animated:YES];
 }
 
 -(void)set{
-    LoginViewController *loginVc = [[LoginViewController alloc] init];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    [self.navigationController setViewControllers:[[NSArray alloc]initWithObjects:loginVc, nil]];
-    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
-    [defaults removeObjectForKey:@"user"];
-    [defaults synchronize];
-
+    SetViewController *setVc = [[SetViewController alloc] init];
+    [self.navigationController pushViewController:setVc animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

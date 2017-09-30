@@ -37,7 +37,7 @@ int num = 0;
     NSLog(@"aa:%d",num);
     num++;
     if(num%10==0){
-        //[self sendMsg:@"提示"];
+        [self sendMsg:@"提示"];
     }
     if(num==700){
         //[self sendMsg:@"完成"];

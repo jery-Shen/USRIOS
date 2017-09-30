@@ -48,12 +48,13 @@
     UITextField *textfieldName = [[UITextField alloc]init];
     textfieldName.bounds = CGRectMake(0, 0, 280, 30);
     textfieldName.center = CGPointMake(self.view.frame.size.width/2,350);
-    UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+    UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 36, 30)];
     icon.image = [UIImage imageNamed:@"icon_user"];
+    icon.contentMode = UIViewContentModeLeft;
     textfieldName.leftView =icon;
     textfieldName.leftViewMode = UITextFieldViewModeAlways;
     
-    [textfieldName setValue:[NSNumber numberWithInt:12] forKey:@"paddingLeft"];
+    [textfieldName setValue:[NSNumber numberWithInt:0] forKey:@"paddingLeft"];
     textfieldName.placeholder = @"用户名";
     textfieldName.keyboardType =  UIKeyboardTypeAlphabet;
     textfieldName.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -87,13 +88,14 @@
    
     
     
-    UIImageView *icon2 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+    UIImageView *icon2 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 36, 30)];
     icon2.image = [UIImage imageNamed:@"icon_pwd"];
+    icon2.contentMode = UIViewContentModeLeft;
     textfieldPassworld.leftView =icon2;
     textfieldPassworld.leftViewMode = UITextFieldViewModeAlways;
     
     
-    [textfieldPassworld setValue:[NSNumber numberWithInt:12] forKey:@"paddingLeft"];
+    [textfieldPassworld setValue:[NSNumber numberWithInt:0] forKey:@"paddingLeft"];
     textfieldPassworld.delegate = self;
     textfieldPassworld.tag = 10;
     [self.view addSubview:textfieldPassworld];
@@ -209,11 +211,10 @@
             return NO;
         }
     }else {
-        if (range.location > 5) {
+        if (range.location > 15) {
             return NO;
         }
     }
-    
     return YES;
 }
 
@@ -237,8 +238,6 @@
     }
     
     [UIView commitAnimations];
-    
-    
 }
 
 //当键退出时调用
@@ -257,7 +256,6 @@
     if(textField.tag == 11){
         [textfieldPassworld becomeFirstResponder];
     }else if(textField.tag == 10){
-        NSLog(@"111");
         [textfieldPassworld resignFirstResponder];
     }
     return YES;
