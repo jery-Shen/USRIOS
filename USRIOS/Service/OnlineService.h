@@ -10,5 +10,7 @@
 
 @interface OnlineService : NSObject
 +(instancetype)sharedInstance;
--(void)console;
+-(void)timerRun;
+-(void)timerStop;
+-(void)timerRunBack;
 @end

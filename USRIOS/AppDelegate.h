@@ -14,5 +14,6 @@
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) NSMutableArray *deviceList;
 
+-(NSDictionary *)getDevice:(int)deviceId;
 @end
 

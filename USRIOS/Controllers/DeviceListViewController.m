@@ -31,8 +31,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initView];
-    [self loadData];
-    //[self performSelector:@selector(loadData) withObject:nil afterDelay:1];
+   
+    self.loading.hidden = NO;
+    [self.loading startAnimating];
+    [[OnlineService sharedInstance] timerRun];
+    //[[OnlineService sharedInstance] performSelector:@selector(timerRun) withObject:nil afterDelay:0.5];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncData:) name:@"SyncLineNotification" object:nil];
+
     NSLog(@"viewDidLoad");
 }
 
@@ -45,8 +50,6 @@
     UIBarButtonItem *rightButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_btn"] style:UIBarButtonItemStyleDone target:self action:@selector(menu:)];
     self.navigationItem.rightBarButtonItem = rightButtonItem;
     //self.navigationController.navigationBar.prefersLargeTitles = true;
-
-    
     
     CGRect rx = [ UIScreen mainScreen ].bounds;
     CGFloat screenWidth = rx.size.width;
@@ -68,49 +71,19 @@
     self.data = [NSMutableArray arrayWithCapacity:20];
 }
 
--(void)loadData{
-    self.loading.hidden = NO;
-    [self.loading startAnimating];
-    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
-    NSDictionary *user = [defaults objectForKey:@"user"];
-    NSDictionary *map = [HttpUtil getSign:user];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@GetDeviceListDao?areaId=%d&token=%@&timestamp=%@@&sign=%@",URL_PRE,[user[@"areaId"] intValue],map[@"token"],map[@"timestamp"],map[@"sign"]]];
-    //NSLog(@"%@",url);
-    NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:
-        ^(NSData *data, NSURLResponse *response, NSError *error) {
-            if(!error){
-                NSDictionary *res =   [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&error];
-                if([res[@"status"] intValue] == 200){
-                    NSArray *items = res[@"result"];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-                        [self.data removeAllObjects];
-                        for(int i = 0; i < [items count]; i++)
-                        {
-                            [self.data addObject:items[i]];
-                            [appDelegate.deviceList addObject:items[i]];
-                        }
-                        [self.tableView reloadData];
-                    });
-                }else{
-                    [ViewUtil alertMsg:res[@"error"] inViewController:self];
-                }
-                
-            }else{
-                [ViewUtil alertMsg:[NSString stringWithFormat:@"%@",error] inViewController:self];
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.loading.hidden = YES;
-                [self.loading stopAnimating];
-            });
-
-           
-            
-        }];
-    [task resume];
-
+-(void)syncData:(id)sender{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   // NSLog(@"%lu",(unsigned long)[appDelegate.deviceList count]);
+    [self.data removeAllObjects];
+    for(int i = 0; i < [appDelegate.deviceList count]; i++)
+    {
+        [self.data addObject:appDelegate.deviceList[i]];
+    }
+    [self.tableView reloadData];
+    if(![self.loading isHidden]){
+        self.loading.hidden = YES;
+        [self.loading stopAnimating];
+    }
 }
 
 
@@ -159,7 +132,8 @@
 }
 
 -(void)refresh{
-    [self loadData];
+    self.loading.hidden = NO;
+    [self.loading startAnimating];
 }
 
 -(void)instructe{
@@ -239,6 +213,8 @@
 
 -(void)dealloc{
     NSLog(@"listdealloc");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[OnlineService sharedInstance] timerStop];
 }
 
 

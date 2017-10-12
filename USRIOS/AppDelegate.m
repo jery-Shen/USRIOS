@@ -110,19 +110,19 @@
 
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-//    __block UIBackgroundTaskIdentifier bgTask;// 后台任务标识
-//
-//    bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
-//        [application endBackgroundTask:bgTask];
-//        bgTask = UIBackgroundTaskInvalid;
-//    }];
-//
-//    [[OnlineService sharedInstance] console];
+    __block UIBackgroundTaskIdentifier bgTask;// 后台任务标识
+
+    bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
+        [application endBackgroundTask:bgTask];
+        bgTask = UIBackgroundTaskInvalid;
+    }];
+
+    //[[OnlineService sharedInstance] timerRunBack];
 }
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    //[UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
     NSDictionary *user = [defaults objectForKey:@"user"];
     [self loginWithName:user[@"userName"] andPwd:user[@"userPwd"]];
@@ -143,6 +143,18 @@
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
     //[[NSNotificationCenter defaultCenter] postNotificationName:@"pushWebView" object:nil];
+}
+
+-(NSDictionary *)getDevice:(int)deviceId{
+    if (self.deviceList!=nil && [self.deviceList count] > 0) {
+        for(int i = 0; i < [self.deviceList count]; i++)
+        {
+            if([self.deviceList[i][@"deviceId"] intValue]==deviceId){
+                return self.deviceList[i];
+            }
+        }
+    }
+    return nil;
 }
 
 
