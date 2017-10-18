@@ -15,9 +15,10 @@
 #import "LoginViewController.h"
 #import "HttpUtil.h"
 #import "AppDelegate.h"
-#import "OnlineService.h"
+#import "WifiService.h"
 #import "SetViewController.h"
 #import "WebViewController.h"
+#import "NetUtil.h"
 
 
 @interface DeviceListWifiViewController ()<UITableViewDataSource,UITableViewDelegate>
@@ -33,7 +34,7 @@
     [super viewDidLoad];
     [self initView];
     [self loadData];
-    //[self performSelector:@selector(loadData) withObject:nil afterDelay:1];
+    [[WifiService sharedInstance] timerRun];
     NSLog(@"viewDidLoad");
 }
 
@@ -68,7 +69,12 @@
 }
 
 -(void)loadData{
-    [ViewUtil alertMsg:@"当前连接的wifi不是ivc,请先连接指定wifi" inViewController:self];
+    if([[NetUtil getWifiSsid]isEqualToString:@"xx"]){
+        self.loading.hidden = NO;
+        [self.loading startAnimating];
+    }else{
+        [ViewUtil alertMsg:@"当前连接的wifi不是ivc,请先连接指定wifi" inViewController:self];
+    }
 }
 
 -(void)menu:(id)sender{
@@ -196,6 +202,7 @@
 
 -(void)dealloc{
     NSLog(@"listwifidealloc");
+    [[WifiService sharedInstance] timerStop];
 }
 
 

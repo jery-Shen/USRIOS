@@ -86,4 +86,16 @@
     //    NSLog(@"%@",_input.text);
 }
 
++(NSString *)ToHex:(long)tmpid{
+    return nil;
+}
+
++(NSString *)ToHex2:(long)tmpid{
+    return nil;
+}
+
++(NSString *)ToHex4:(long)tmpid{
+    return nil;
+}
+
 @end

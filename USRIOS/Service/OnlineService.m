@@ -10,8 +10,8 @@
 #import "AppDelegate.h"
 #import "OnlineService.h"
 #import "HttpUtil.h"
+#import "NotificationUtil.h"
 
-int num = 0;
 @interface OnlineService()
 @property(retain,nonatomic)NSTimer *timer;
 @end
@@ -85,25 +85,6 @@ int num = 0;
     [task resume];
 }
 
--(void)sendMsg:(NSString *)msg andTitle:(NSString *)title{
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    // 设置触发通知的时间
-    NSDate *fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
-    
-    notification.fireDate = fireDate;
-    // 时区
-    notification.timeZone = [NSTimeZone defaultTimeZone];
-    
-    
-    // 通知内容
-    notification.alertTitle = title;
-    notification.alertBody =  msg;
-    notification.applicationIconBadgeNumber ++;
-    // 通知被触发时播放的声音
-    notification.soundName = UILocalNotificationDefaultSoundName;
-    
-    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-}
 
 -(void)diffAlarmLocalDevice:(NSDictionary *)localDevice andDevcie:(NSDictionary *)device{
     if (device[@"infoBar"] != localDevice[@"infoBar"] && [device[@"infoBar"] intValue] > 1) {
@@ -131,7 +112,7 @@ int num = 0;
                 break;
         }
         NSLog(@"%@",alarmMsg);
-        [self sendMsg:alarmMsg andTitle:[NSString stringWithFormat:@"设备%@",device[@"deviceId"]]];
+        [NotificationUtil sendMsg:alarmMsg andTitle:[NSString stringWithFormat:@"设备%@",device[@"deviceId"]]];
     }
 }
 

@@ -139,9 +139,8 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-    NSLog(@"*********notification:%@******************",notification.alertBody);
+    NSLog(@"notification:%@",notification.alertBody);
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-    
     //[[NSNotificationCenter defaultCenter] postNotificationName:@"pushWebView" object:nil];
 }
 
