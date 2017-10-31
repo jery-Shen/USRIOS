@@ -8,6 +8,7 @@
 
 #import "DeviceDetailViewController.h"
 #import "ViewUtil.h"
+#import "DeviceSetViewController.h"
 
 @interface DeviceDetailViewController ()<UIWebViewDelegate>
 @property(nonatomic, retain)  UIWebView *webView;
@@ -24,6 +25,9 @@
 -(void)initView{
     self.title = [NSString stringWithFormat:@"智控%@",self.device[@"deviceId"]];
     self.view.backgroundColor = [ViewUtil colorHex:@"f8f8f8"];
+    
+    UIBarButtonItem *rightButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)];
+    self.navigationItem.rightBarButtonItem = rightButtonItem;
 
     CGRect rx = [ UIScreen mainScreen ].bounds;
     CGFloat screenWidth = rx.size.width;
@@ -56,10 +60,10 @@
         return YES;
 }
 
--(void)myclick:(id)sender{
-    
-    NSLog(@"1111");
-    
+-(void)edit:(id)sender{
+    DeviceSetViewController *deviceSetVc = [[DeviceSetViewController alloc]init];
+    deviceSetVc.device = self.device;
+    [self.navigationController pushViewController:deviceSetVc animated:YES];
 }
 
 

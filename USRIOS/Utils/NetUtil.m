@@ -7,9 +7,22 @@
 //
 
 #import "NetUtil.h"
+#import "HttpUtil.h"
 #import <SystemConfiguration/CaptiveNetwork.h>  
 
 @implementation NetUtil
++(int)online{
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@OnLine",URL_PRE]];
+    NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:
+                                  ^(NSData *data, NSURLResponse *response, NSError *error) {
+                                      NSDictionary *res =   [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&error];
+                                      NSLog(@"初始化：%@",res);
+                                  }];
+    [task resume];
+    return 0;
+}
 +(NSDictionary *)getWifiInfo{
     return nil;
 }

@@ -187,7 +187,8 @@
                                           }
 
                                       }else{
-                                          [ViewUtil alertMsg:[NSString stringWithFormat:@"%@",error] inViewController:self];
+                                          //[ViewUtil alertMsg:[NSString stringWithFormat:@"%@",error] inViewController:self];
+                                          [ViewUtil alertMsg:@"网络错误" inViewController:self];
                                                                                 }
                                       dispatch_async(dispatch_get_main_queue(), ^{
                                           [self.hud setHidden:YES];

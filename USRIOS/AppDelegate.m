@@ -14,6 +14,7 @@
 #import "DeviceListWifiViewController.h"
 #import "HttpUtil.h"
 #import "OnlineService.h"
+#import "NetUtil.h"
 
 @interface AppDelegate ()
 
@@ -33,6 +34,7 @@
         [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     }
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    [NetUtil online];
     
     self.deviceList = [NSMutableArray arrayWithCapacity:50];
     

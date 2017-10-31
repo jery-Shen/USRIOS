@@ -29,7 +29,7 @@
     NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
     NSMutableArray *hostList = [[NSMutableArray alloc]initWithArray:[defaults arrayForKey:@"hostList"]];
     [[Client sharedInstance] setHostList:hostList];
-    [[Client sharedInstance] initUdp:@"10.10.13.245"];
+    [[Client sharedInstance] initUdp:@"192.168.0.1"];
     [[Client sharedInstance] scanAndConnect];
 
     self.timer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:[Client sharedInstance] selector:@selector(scanServer:) userInfo:nil repeats:YES];

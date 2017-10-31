@@ -214,22 +214,11 @@ var dataStr = '{"airCount":20,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
 					param.areaId = this.device.areaId;
 					param.deviceId = this.device.deviceId;
 					console.info(JSON.stringify(param));
-					
-					window.JsBridge.updateDevice(JSON.stringify(param));
-					
-					/* window.JsBridge.showLoading();
-					var that = this;
-		            that.$http.post('http://usr.lightxx.cn/UpdateDevice',param,{emulateJSON:true,headers:{'Content-Type':'application/x-www-form-urlencoded'}}).then(function(res){
-		                if(res.body.status==200){
-		                    window.JsBridge.saveSuccess();
-		                }else{
-		                	window.JsBridge.saveError(res.body.error);
-		                }
-		            }); */
-		            
-		            
+					//window.JsBridge.updateDevice(JSON.stringify(param));
+					window.location.href="objc://updateDevice?"+JSON.stringify(param);
 				}else{
-					window.JsBridge.noChange();
+					//window.JsBridge.noChange();
+                    window.location.href="objc://noChange";
 				}
 			}
 		}
