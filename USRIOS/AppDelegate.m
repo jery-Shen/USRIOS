@@ -127,7 +127,9 @@
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
     NSDictionary *user = [defaults objectForKey:@"user"];
-    [self loginWithName:user[@"userName"] andPwd:user[@"userPwd"]];
+    if(user!=nil){
+        [self loginWithName:user[@"userName"] andPwd:user[@"userPwd"]];
+    }
 }
 
 

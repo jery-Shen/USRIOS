@@ -12,4 +12,5 @@
 +(instancetype)sharedInstance;
 -(void)timerRun;
 -(void)timerStop;
+-(BOOL)hasDevice;
 @end

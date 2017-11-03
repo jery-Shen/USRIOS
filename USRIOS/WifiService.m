@@ -46,4 +46,8 @@
     [appDelegate.deviceList removeAllObjects];
 }
 
+-(BOOL)hasDevice{
+    return [Client sharedInstance].dsockets.count>0;
+}
+
 @end

@@ -82,8 +82,8 @@
     if([url hasPrefix:@"objc://noChange"]){
         NSLog(@"noChange");
         [self.hud setHidden:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     }
-    
     return YES;
 }
 
@@ -93,8 +93,48 @@
 }
 
 -(void)updateDeviceTask:(NSDictionary *)dic{
-    NSLog(@"%@",dic);
-    NSLog(@"updateDeviceTask");
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+    NSDictionary *user = [defaults objectForKey:@"user"];
+    NSDictionary *map = [HttpUtil getSign:user];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@UpdateDevice?token=%@&timestamp=%@@&sign=%@",URL_PRE,map[@"token"],map[@"timestamp"],map[@"sign"]]];
+    NSMutableString *postBody = [NSMutableString stringWithFormat:@""];
+    NSArray *keys = [dic allKeys];
+    for (int i = 0; i < keys.count; i ++){
+        [postBody appendString:[NSString stringWithFormat:@"%@=%@&", keys[i], dic[keys[i]]]];
+    }
+    [postBody appendString:[NSString stringWithFormat:@"t=1"]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = [postBody dataUsingEncoding:NSUTF8StringEncoding];
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                            completionHandler:
+                                  ^(NSData *data, NSURLResponse *response, NSError *error) {
+                                      
+                                      if(!error){
+                                          NSDictionary *res =   [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&error];
+                                          //NSLog(@"%@",res);
+                                          if([res[@"status"] intValue] == 200){
+                                              dispatch_time_t timer = dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC);
+                                              dispatch_after(timer, dispatch_get_main_queue(), ^{
+                                                  self.hud.labelText = @"更新成功";
+                                                  self.hud.mode = MBProgressHUDModeText;
+                                                  [self.navigationController popViewControllerAnimated:YES];
+                                              });
+                                          }else{
+                                              dispatch_async(dispatch_get_main_queue(), ^{
+                                                  [ViewUtil alertMsg:res[@"error"] inViewController:self];
+                                                  [self.hud setHidden:YES];
+                                              });
+                                          }
+                                      }else{
+                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                              [ViewUtil alertMsg:[NSString stringWithFormat:@"%@",error] inViewController:self];
+                                              [self.hud setHidden:YES];
+                                          });
+                                      }
+                                  }];
+    [task resume];
 }
 
 -(void)updateDeviceWifiTask:(NSDictionary *)dic{

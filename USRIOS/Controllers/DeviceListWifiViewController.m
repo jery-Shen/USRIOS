@@ -69,12 +69,14 @@
 }
 
 -(void)loadData{
-    if([[NetUtil getWifiSsid]isEqualToString:@"xx"]){
-        self.loading.hidden = NO;
-        [self.loading startAnimating];
-    }else{
-        [ViewUtil alertMsg:@"当前连接的wifi不是ivc,请先连接指定wifi" inViewController:self];
-    }
+    self.loading.hidden = NO;
+    [self.loading startAnimating];
+    dispatch_time_t timer = dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC);
+    dispatch_after(timer, dispatch_get_main_queue(), ^{
+        if(![[WifiService sharedInstance] hasDevice]){
+             [ViewUtil alertMsg:@"当前连接的wifi不是ivc,请先连接指定wifi" inViewController:self];
+        }
+    });
 }
 
 -(void)menu:(id)sender{
