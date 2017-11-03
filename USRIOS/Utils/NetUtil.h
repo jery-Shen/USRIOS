@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface NetUtil : NSObject
++(int)online;
 +(NSDictionary *)getWifiInfo;
 +(NSString *)getWifiSsid;
 @end

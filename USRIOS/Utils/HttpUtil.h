@@ -11,4 +11,6 @@
 @interface HttpUtil : NSObject
 extern NSString * const URL_PRE;
 +(NSDictionary *)getSign:(NSDictionary *)user;
++(NSString *)URLEncodedString:(NSString *)str;
++(NSString *)URLDecodedString:(NSString *)str;
 @end
