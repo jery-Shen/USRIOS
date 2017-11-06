@@ -99,19 +99,40 @@
     }
 }
 
+-(void)byteTransfer:(NSData *)data withTag:(long)tag{
+    NSLog(@"设备%ld取得数据%@",tag,data);
+    NSMutableDictionary *device = [NSMutableDictionary dictionary];
+    device[@"online"] = @1;
+    Byte *buff = (Byte *)[data bytes];
+    int aa = [Hex parseHex4:buff[3] :buff[4]];
+    NSLog(@"temp:%d",aa);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SyncWifiNotification" object:nil];
+}
+
+-(NSString *)formatDate:(NSDate *)date{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"YYYY-MM-dd hh:mm:ss"];
+    return [formatter stringFromDate:date];
+}
 
 #pragma mark  - 连接成功回调
 -(void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
 {
-    NSLog(@"socket连接成功");
-    [sock readDataWithTimeout:-1 tag:0];
+    
+    for(int i=0;i<self.dsockets.count;i++){
+        if(self.dsockets[i][@"socket"] == sock){
+            NSLog(@"设备%@:连接成功",self.dsockets[i][@"deviceId"]);
+            [sock readDataWithTimeout:-1 tag:[self.dsockets[i][@"deviceId"] longValue]];
+        }
+    }
+    
 }
 -(void)onSocketDidDisconnect:(AsyncSocket *)sock{
     NSLog(@"socket失去连接");
 }
 -(void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag{
-    NSLog(@"取得数据%@",data);
-     [sock readDataWithTimeout:-1 tag:0];
+    [self byteTransfer:data withTag:tag];
+    [sock readDataWithTimeout:-1 tag:tag];
 }
 -(void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:(long)tag{
     //NSLog(@"didWriteDataWithTag");

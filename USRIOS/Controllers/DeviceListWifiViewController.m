@@ -35,6 +35,7 @@
     [self initView];
     [self loadData];
     [[WifiService sharedInstance] timerRun];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncData:) name:@"SyncWifiNotification" object:nil];
     NSLog(@"viewDidLoad");
 }
 
@@ -68,6 +69,22 @@
     self.data = [NSMutableArray arrayWithCapacity:20];
 }
 
+-(void)syncData:(id)sender{
+    NSLog(@"hahahah!!!!!");
+//    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+//    // NSLog(@"%lu",(unsigned long)[appDelegate.deviceList count]);
+//    [self.data removeAllObjects];
+//    for(int i = 0; i < [appDelegate.deviceList count]; i++)
+//    {
+//        [self.data addObject:appDelegate.deviceList[i]];
+//    }
+//    [self.tableView reloadData];
+//    if(![self.loading isHidden]){
+//        self.loading.hidden = YES;
+//        [self.loading stopAnimating];
+//    }
+}
+
 -(void)loadData{
     self.loading.hidden = NO;
     [self.loading startAnimating];
@@ -75,9 +92,13 @@
     dispatch_after(timer, dispatch_get_main_queue(), ^{
         if(![[WifiService sharedInstance] hasDevice]){
              [ViewUtil alertMsg:@"当前连接的wifi不是ivc,请先连接指定wifi" inViewController:self];
+        }else{
+            
         }
     });
 }
+
+
 
 -(void)menu:(id)sender{
     NSArray *menuItems =
@@ -204,6 +225,7 @@
 
 -(void)dealloc{
     NSLog(@"listwifidealloc");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[WifiService sharedInstance] timerStop];
 }
 
