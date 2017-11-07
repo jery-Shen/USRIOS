@@ -42,7 +42,7 @@
         if(![self isConnected:[self.hostList[i][@"deviceId"] intValue]] && self.hostList[i][@"ip"]){
             //NSLog(@"%@",self.hostList[i]);
             AsyncSocket *socket = [[AsyncSocket alloc] initWithDelegate:self];
-            [socket connectToHost:self.hostList[i][@"ip"] onPort:8089 withTimeout:3 error:nil];
+            [socket connectToHost:self.hostList[i][@"ip"] onPort:8090 withTimeout:3 error:nil];
             NSMutableDictionary *deviceSocket = [NSMutableDictionary dictionaryWithObjectsAndKeys:socket,@"socket",self.hostList[i][@"deviceId"],@"deviceId",@(1),@"unReceiveTime", nil];
             //NSLog(@"%@",deviceSocket);
             [self.dsockets addObject:deviceSocket];
@@ -148,7 +148,7 @@
 
 -(BOOL)onUdpSocket:(AsyncUdpSocket *)sock didReceiveData:(NSData *)data withTag:(long)tag fromHost:(NSString *)host port:(UInt16)port{
     NSString *msg =[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-    NSArray *temp = [msg componentsSeparatedByString:@" "];
+    NSArray *temp = [msg componentsSeparatedByString:@","];
     for(int i=0;i<self.hostList.count;i++){
         NSMutableDictionary *host = [NSMutableDictionary dictionaryWithDictionary:self.hostList[i]];
         if([host[@"mac"] isEqualToString:temp[1]]){

@@ -106,6 +106,7 @@
 		A6E2E5FC1F90991B00012004 /* NotificationUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = A6E2E5FB1F90991B00012004 /* NotificationUtil.m */; };
 		A6E2E5FF1F90A80500012004 /* WifiService.m in Sources */ = {isa = PBXBuildFile; fileRef = A6E2E5FE1F90A80500012004 /* WifiService.m */; };
 		A6FED4641F0344620031B6CD /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A6FED4621F0344620031B6CD /* Launch Screen.xib */; };
+		B6899CC01FB1F9570039EFED /* Md5.m in Sources */ = {isa = PBXBuildFile; fileRef = B6899CBF1FB1F9570039EFED /* Md5.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -240,6 +241,8 @@
 		A6E2E5FD1F90A80500012004 /* WifiService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WifiService.h; sourceTree = "<group>"; };
 		A6E2E5FE1F90A80500012004 /* WifiService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WifiService.m; sourceTree = "<group>"; };
 		A6FED4631F0344620031B6CD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "Base.lproj/Launch Screen.xib"; sourceTree = "<group>"; };
+		B6899CBE1FB1F9570039EFED /* Md5.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Md5.h; sourceTree = "<group>"; };
+		B6899CBF1FB1F9570039EFED /* Md5.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Md5.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -451,6 +454,8 @@
 				A66CB02D1F95F36C004A0114 /* CRC.m */,
 				A64032CA1F9773A600458E96 /* NetUtil.h */,
 				A64032CB1F9773A600458E96 /* NetUtil.m */,
+				B6899CBE1FB1F9570039EFED /* Md5.h */,
+				B6899CBF1FB1F9570039EFED /* Md5.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -525,8 +530,8 @@
 				TargetAttributes = {
 					A614AAB91EDE9AFA001A1614 = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = JULHSND4WY;
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = 4NEU82K3YR;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -654,6 +659,7 @@
 				A629FC1A1F7222E80084E2C0 /* WebViewController.m in Sources */,
 				A6A6CEB81EF3D08400EC8B97 /* ViewController.m in Sources */,
 				A6A6CEB61EF3D08400EC8B97 /* LoginViewController.m in Sources */,
+				B6899CC01FB1F9570039EFED /* Md5.m in Sources */,
 				A614AAC21EDE9AFA001A1614 /* AppDelegate.m in Sources */,
 				A6E2E5FF1F90A80500012004 /* WifiService.m in Sources */,
 				A629FC171F7222B10084E2C0 /* SetViewController.m in Sources */,
@@ -781,15 +787,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Distribution: XinXin Zhang (JULHSND4WY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = JULHSND4WY;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4NEU82K3YR;
 				INFOPLIST_FILE = USRIOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = usr.work.USRIOS2;
+				PRODUCT_BUNDLE_IDENTIFIER = usr.work.USRIOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3b8be130-550c-4d2e-9a1f-27674ef23bac";
-				PROVISIONING_PROFILE_SPECIFIER = development_Distrbution;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -797,15 +803,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Distribution: XinXin Zhang (JULHSND4WY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = JULHSND4WY;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4NEU82K3YR;
 				INFOPLIST_FILE = USRIOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = usr.work.USRIOS2;
+				PRODUCT_BUNDLE_IDENTIFIER = usr.work.USRIOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3b8be130-550c-4d2e-9a1f-27674ef23bac";
-				PROVISIONING_PROFILE_SPECIFIER = development_Distrbution;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
