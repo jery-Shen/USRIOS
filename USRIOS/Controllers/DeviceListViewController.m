@@ -80,7 +80,7 @@
         [self.data addObject:appDelegate.deviceList[i]];
     }
     [self.tableView reloadData];
-    if(![self.loading isHidden]){
+    if(self.data.count>0 && ![self.loading isHidden]){
         self.loading.hidden = YES;
         [self.loading stopAnimating];
     }

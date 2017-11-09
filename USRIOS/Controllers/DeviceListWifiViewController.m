@@ -19,6 +19,8 @@
 #import "SetViewController.h"
 #import "WebViewController.h"
 #import "NetUtil.h"
+#import "Client.h"
+
 
 
 @interface DeviceListWifiViewController ()<UITableViewDataSource,UITableViewDelegate>
@@ -38,6 +40,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncData:) name:@"SyncWifiNotification" object:nil];
     NSLog(@"viewDidLoad");
 }
+
+
+
 
 -(void)initView{
     self.title = @"智控列表";
@@ -70,25 +75,23 @@
 }
 
 -(void)syncData:(id)sender{
-    NSLog(@"hahahah!!!!!");
-//    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-//    // NSLog(@"%lu",(unsigned long)[appDelegate.deviceList count]);
-//    [self.data removeAllObjects];
-//    for(int i = 0; i < [appDelegate.deviceList count]; i++)
-//    {
-//        [self.data addObject:appDelegate.deviceList[i]];
-//    }
-//    [self.tableView reloadData];
-//    if(![self.loading isHidden]){
-//        self.loading.hidden = YES;
-//        [self.loading stopAnimating];
-//    }
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [self.data removeAllObjects];
+    for(int i = 0; i < [appDelegate.deviceList count]; i++)
+    {
+        [self.data addObject:appDelegate.deviceList[i]];
+    }
+    [self.tableView reloadData];
+    if(self.data.count>0 && ![self.loading isHidden]){
+        self.loading.hidden = YES;
+        [self.loading stopAnimating];
+    }
 }
 
 -(void)loadData{
     self.loading.hidden = NO;
     [self.loading startAnimating];
-    dispatch_time_t timer = dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC);
+    dispatch_time_t timer = dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC);
     dispatch_after(timer, dispatch_get_main_queue(), ^{
         if(![[WifiService sharedInstance] hasDevice]){
              [ViewUtil alertMsg:@"当前连接的wifi不是ivc,请先连接指定wifi" inViewController:self];
@@ -145,7 +148,9 @@
 }
 
 -(void)refresh{
-    [self loadData];
+    self.loading.hidden = NO;
+    [self.loading startAnimating];
+    [[Client sharedInstance] scanAndConnect];
 }
 
 -(void)instructe{

@@ -69,7 +69,7 @@
                                                       NSDictionary *device = items[i];
                                                       NSDictionary *localDevice = [appDelegate getDevice:[device[@"deviceId"] intValue]];
                                                       if(localDevice==nil){
-                                                         [appDelegate.deviceList addObject:items[i]];
+                                                         [appDelegate.deviceList addObject:device];
                                                       }else{
                                                           [appDelegate.deviceList replaceObjectAtIndex:[appDelegate.deviceList indexOfObject:localDevice] withObject:device];
                                                           [self diffAlarmLocalDevice:localDevice andDevcie:device];
