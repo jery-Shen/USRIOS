@@ -43,7 +43,7 @@
             //NSLog(@"%@",self.hostList[i]);
             AsyncSocket *socket = [[AsyncSocket alloc] initWithDelegate:self];
             [socket connectToHost:self.hostList[i][@"ip"] onPort:8090 withTimeout:3 error:nil];
-            NSMutableDictionary *deviceSocket = [NSMutableDictionary dictionaryWithObjectsAndKeys:socket,@"socket",self.hostList[i][@"deviceId"],@"deviceId",[NSMutableDictionary dictionary],@"device",@(1),@"unReceiveTime", nil];
+            NSMutableDictionary *deviceSocket = [NSMutableDictionary dictionaryWithObjectsAndKeys:socket,@"socket",self.hostList[i][@"deviceId"],@"deviceId",[NSMutableDictionary dictionary],@"device",[NSMutableData data],@"buffer",@(1),@"unReceiveTime", nil];
             //NSLog(@"%@",deviceSocket);
             [self.dsockets addObject:deviceSocket];
         }
@@ -221,7 +221,20 @@
 
 
 -(void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag{
-    [self byteTransfer:data withTag:tag];
+    NSMutableDictionary *deviceSocket = [self getDeviceSocket:(int)tag];
+    NSMutableData *buffer = deviceSocket[@"buffer"];
+    [buffer appendData:data];
+    if(buffer.length>=205){
+        if([[Hex hexStringForData:[buffer subdataWithRange:NSMakeRange(buffer.length-4,2)]] isEqual:@"aa55"]){
+            NSData *crcData = [buffer subdataWithRange:NSMakeRange(0, buffer.length - 2)];
+            if([[[CRC getCRC:crcData] subdataWithRange:NSMakeRange(buffer.length - 2, 2)] isEqualToData:[buffer subdataWithRange:NSMakeRange(buffer.length - 2, 2)]]){
+                [self byteTransfer:buffer withTag:tag];
+            }
+        }
+        [buffer resetBytesInRange:NSMakeRange(0, [data length])];
+        [buffer setLength:0];
+        
+    }
     [sock readDataWithTimeout:-1 tag:tag];
 }
 -(void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:(long)tag{

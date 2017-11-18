@@ -93,7 +93,7 @@
             }
         }
     }
-    NSLog(@"%lu",(unsigned long)appDelegate.deviceList.count);
+    //NSLog(@"%lu",(unsigned long)appDelegate.deviceList.count);
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SyncWifiNotification" object:nil];
     
 }
