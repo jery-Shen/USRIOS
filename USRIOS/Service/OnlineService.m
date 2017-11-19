@@ -52,7 +52,7 @@
     NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
     NSDictionary *user = [defaults objectForKey:@"user"];
     NSDictionary *map = [HttpUtil getSign:user];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@GetDeviceListDao?areaId=%d&token=%@&timestamp=%@@&sign=%@",URL_PRE,[user[@"areaId"] intValue],map[@"token"],map[@"timestamp"],map[@"sign"]]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@GetDeviceList?areaId=%d&token=%@&timestamp=%@@&sign=%@",URL_PRE,[user[@"areaId"] intValue],map[@"token"],map[@"timestamp"],map[@"sign"]]];
     //NSLog(@"%@",url);
     NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
     NSURLSession *session = [NSURLSession sharedSession];

@@ -9,9 +9,11 @@
 #import "DeviceDetailViewController.h"
 #import "ViewUtil.h"
 #import "DeviceSetViewController.h"
+#import "AppDelegate.h"
 
 @interface DeviceDetailViewController ()<UIWebViewDelegate>
 @property(nonatomic, retain)  UIWebView *webView;
+@property(retain,nonatomic)NSTimer *timer;
 @end
 
 @implementation DeviceDetailViewController
@@ -60,6 +62,15 @@
         return YES;
 }
 
+-(void)syncData{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    self.device = [appDelegate getDevice:[self.device[@"deviceId"] intValue]];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self.device options:0 error:nil];
+    NSString *deviceStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSString *deviceStrZy = [deviceStr stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
+    [self.webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"javascript:onData('%@')",deviceStrZy]];
+}
+
 -(void)edit:(id)sender{
     DeviceSetViewController *deviceSetVc = [[DeviceSetViewController alloc]init];
     deviceSetVc.device = self.device;
@@ -78,12 +89,16 @@
     self.navigationController.navigationBar.shadowImage = [UIImage new];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
     [super viewWillDisappear:animated];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(syncData) userInfo:nil repeats:YES];
+    
 }
 
 
 - (void)viewWillDisappear:(BOOL)animated {
     [self.navigationController.navigationBar setBarTintColor:[ViewUtil colorHex:@"128bed"]];
     [super viewWillDisappear:animated];
+    [self.timer invalidate];
+    self.timer = nil;
 }
 
 
@@ -94,6 +109,8 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+
 /*
 #pragma mark - Navigation
 
@@ -103,5 +120,6 @@
     // Pass the selected object to the new view controller.
 }
 */
+
 
 @end
