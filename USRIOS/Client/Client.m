@@ -232,7 +232,6 @@
             }
         }
         [buffer resetBytesInRange:NSMakeRange(0, [data length])];
-        
         [buffer setLength:0];
         
     }
