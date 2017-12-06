@@ -65,10 +65,14 @@
 -(void)syncData{
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.device = [appDelegate getDevice:[self.device[@"deviceId"] intValue]];
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self.device options:0 error:nil];
-    NSString *deviceStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    NSString *deviceStrZy = [deviceStr stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
-    [self.webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"javascript:onData('%@')",deviceStrZy]];
+    if(self.device){
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self.device options:0 error:nil];
+        NSString *deviceStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        NSString *deviceStrZy = [deviceStr stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
+        [self.webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"javascript:onData('%@')",deviceStrZy]];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 -(void)edit:(id)sender{

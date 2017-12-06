@@ -43,7 +43,7 @@
             //NSLog(@"%@",self.hostList[i]);
             AsyncSocket *socket = [[AsyncSocket alloc] initWithDelegate:self];
             [socket connectToHost:self.hostList[i][@"ip"] onPort:8090 withTimeout:3 error:nil];
-            NSMutableDictionary *deviceSocket = [NSMutableDictionary dictionaryWithObjectsAndKeys:socket,@"socket",self.hostList[i][@"deviceId"],@"deviceId",[NSMutableDictionary dictionary],@"device",[NSMutableData data],@"buffer",@(1),@"unReceiveTime", nil];
+            NSMutableDictionary *deviceSocket = [NSMutableDictionary dictionaryWithObjectsAndKeys:socket,@"socket",self.hostList[i][@"deviceId"],@"deviceId",[NSMutableDictionary dictionary],@"device",[NSMutableData data],@"buffer",@(1),@"unReceiveTime",@(false),@"isSending", nil];
             //NSLog(@"%@",deviceSocket);
             [self.dsockets addObject:deviceSocket];
         }
@@ -87,12 +87,18 @@
         if(self.dsockets && self.dsockets.count>0){
             for(int i=0;i<self.dsockets.count;i++){
                 NSMutableDictionary *deviceSocket = self.dsockets[i];
+                
                 int deviceId = [deviceSocket[@"deviceId"] intValue];
                 if(deviceId!=0){
-                    AsyncSocket *socket = deviceSocket[@"socket"];
-                    Byte buf[] = {(Byte)deviceId,0x03, 0x02, 0x58, 0x00, 0x64};
-                    NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
-                    [socket writeData:[CRC getCRC:data] withTimeout:2 tag:deviceId];
+                    deviceSocket[@"unReceiveTime"] = @([deviceSocket[@"unReceiveTime"] intValue]-1);
+                    //NSLog(@"%@",deviceSocket);
+                    if([deviceSocket[@"unReceiveTime"] intValue]<0 && ![deviceSocket[@"isSending"] boolValue]){
+                        //NSLog(@"设备%d,%d",deviceId,[deviceSocket[@"isSending"] boolValue]);
+                        AsyncSocket *socket = deviceSocket[@"socket"];
+                        Byte buf[] = {(Byte)deviceId,0x03, 0x02, 0x58, 0x00, 0x64};
+                        NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
+                        [socket writeData:[CRC getCRC:data] withTimeout:2 tag:deviceId];
+                    }
                 }
             }
         }
@@ -169,8 +175,7 @@
     device[@"airSpeed40"] = @([Hex parseHex4:buff[127]:buff[128]]);
     device[@"airSpeed45"] = @([Hex parseHex4:buff[129]:buff[130]]);
     device[@"airSpeed50"] = @([Hex parseHex4:buff[131]:buff[132]]);
-    
-    deviceSocket[@"nnReceiveTime"] = @1;
+    deviceSocket[@"unReceiveTime"] = @1;
     deviceSocket[@"receiveCount"] = @([deviceSocket[@"receiveCount"] intValue]+1);
 }
 
@@ -189,6 +194,109 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"YYYY-MM-dd hh:mm:ss"];
     return [formatter stringFromDate:date];
+}
+
+-(BOOL)updateDevice:(NSDictionary *)paramMap{
+    NSMutableArray *sendQueue = [NSMutableArray array];
+    int deviceId = [paramMap[@"deviceId"] intValue];
+    if(paramMap[@"tempUpLimit"]){
+        int tempUpLimit = [paramMap[@"tempUpLimit"] intValue];
+        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x79,0x00,(Byte)tempUpLimit};
+        NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
+        [sendQueue addObject:data];
+    }
+    if(paramMap[@"tempDownLimit"]){
+        int tempDownLimit = [paramMap[@"tempDownLimit"] intValue];
+        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x7a,0x00,(Byte)tempDownLimit};
+        NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
+        [sendQueue addObject:data];
+        
+    }
+    if(paramMap[@"hrUpLimit"]){
+        int hrUpLimit = [paramMap[@"hrUpLimit"] intValue];
+        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x7b,0x00,(Byte)hrUpLimit};
+        NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
+        [sendQueue addObject:data];
+        
+    }
+    if(paramMap[@"hrDownLimit"]){
+        int hrDownLimit = [paramMap[@"hrDownLimit"] intValue];
+        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x7c,0x00,(Byte)hrDownLimit};
+        NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
+        [sendQueue addObject:data];
+        
+    }
+    if(paramMap[@"dpUpLimit"]){
+        int dpUpLimit = [paramMap[@"dpUpLimit"] intValue];
+        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x7d,0x00,(Byte)dpUpLimit};
+        NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
+        [sendQueue addObject:data];
+        
+    }
+    if(paramMap[@"dpDownLimit"]){
+        int dpDownLimit = [paramMap[@"dpDownLimit"] intValue];
+        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x7e,0x00,(Byte)dpDownLimit};
+        NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
+        [sendQueue addObject:data];
+        
+    }
+    if(paramMap[@"tempAlarmClose"]){
+        int tempAlarmClose = [paramMap[@"tempAlarmClose"] intValue];
+        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x7f,0x00,(Byte)tempAlarmClose};
+        NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
+        [sendQueue addObject:data];
+        
+    }
+    if(paramMap[@"hrAlarmClose"]){
+        int hrAlarmClose = [paramMap[@"hrAlarmClose"] intValue];
+        Byte buf[] = {(Byte)deviceId,0x06,0x03,(Byte)0x80,0x00,(Byte)hrAlarmClose};
+        NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
+        [sendQueue addObject:data];
+        
+    }
+    if(paramMap[@"dpAlarmClose"]){
+        int dpAlarmClose = [paramMap[@"dpAlarmClose"] intValue];
+        Byte buf[] = {(Byte)deviceId,0x06,0x03,(Byte)0x81,0x00,(Byte)dpAlarmClose};
+        NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
+        [sendQueue addObject:data];
+        
+    }
+    if(paramMap[@"inWindAlarmClose"]){
+        int inWindAlarmClose = [paramMap[@"inWindAlarmClose"] intValue];
+        Byte buf[] = {(Byte)deviceId,0x06,0x03,(Byte)0x82,0x00,(Byte)inWindAlarmClose};
+        NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
+        [sendQueue addObject:data];
+        
+    }
+    return [self sendUpdate:deviceId withSendQueue:sendQueue];
+}
+
+-(BOOL)sendUpdate:(int)deviceId withSendQueue:(NSArray *)sendQueue{
+    NSMutableDictionary *deviceSocket = [self getDeviceSocket:(int)deviceId];
+    if(deviceSocket!=nil){
+        deviceSocket[@"isSending"] = @(true);
+        [NSThread sleepForTimeInterval:3.5f];
+        if([deviceSocket[@"unReceiveTime"] intValue]<0){
+            for(int i=0;i<sendQueue.count;i++){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    AsyncSocket *socket = deviceSocket[@"socket"];
+                    NSData *data = sendQueue[i];
+                    [socket writeData:[CRC getCRC:data] withTimeout:-1 tag:deviceId];
+                    NSLog(@"%@",data);
+                });
+                [NSThread sleepForTimeInterval:0.5f];
+                
+            }
+            [NSThread sleepForTimeInterval:0.5f];
+            deviceSocket[@"isSending"] = @(false);
+            //NSLog(@"%@",deviceSocket);
+            return YES;
+        }else{
+            deviceSocket[@"isSending"] = @(false);
+            return NO;
+        }
+    }
+    return YES;
 }
 
 #pragma mark  - 连接成功回调

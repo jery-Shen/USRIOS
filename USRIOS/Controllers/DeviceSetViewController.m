@@ -10,6 +10,7 @@
 #import "ViewUtil.h"
 #import "HttpUtil.h"
 #import "MBProgressHUD.h"
+#import "Client.h"
 
 @interface DeviceSetViewController ()<UIWebViewDelegate>
 @property(nonatomic, retain)  UIWebView *webView;
@@ -76,7 +77,8 @@
         if(mode==0){
             [self updateDeviceTask:dic];
         }else{
-            [self updateDeviceWifiTask:dic];
+            //[self updateDeviceWifiTask:dic];
+            [NSThread detachNewThreadSelector:@selector(updateDeviceWifiTask:) toTarget:self withObject:dic];
         }
     }
     if([url hasPrefix:@"objc://noChange"]){
@@ -139,6 +141,14 @@
 
 -(void)updateDeviceWifiTask:(NSDictionary *)dic{
     NSLog(@"updateDeviceWifiTask");
+    if([[Client sharedInstance] updateDevice:dic]){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.hud setHidden:YES];
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+    }else{
+        NSLog(@"设备正在被其他终端操控，请关闭其他终端后再修改");//联网显示：系统检测到设备在联网模式下传输数据，请切换联网模式后再修改设备参数
+    }
 }
 
 - (void)didReceiveMemoryWarning {

@@ -23,5 +23,6 @@
 -(void)initUdp:(NSString *)ip;
 -(void)scanAndConnect;
 -(void)scanServer:(int)scanNum;
+-(BOOL)updateDevice:(NSDictionary *)paramMap;
 
 @end
