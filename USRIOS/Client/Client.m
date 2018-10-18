@@ -379,6 +379,7 @@
         NSMutableDictionary *host = [NSMutableDictionary dictionaryWithDictionary:self.hostList[i]];
         if([host[@"mac"] isEqualToString:temp[1]]){
             host[@"ip"] = temp[0];
+            //host[@"ip"] = @"10.10.12.36";
             [self.hostList replaceObjectAtIndex:i withObject:host];
         }
     }
