@@ -56,7 +56,7 @@
     [self.contentView addSubview:content];
     
     des =[[UILabel alloc] init];
-    des.text = @"换气期数:20.00，进风速度:19.20，目标压差:20";
+    des.text = @"换气次数:20.00，进风速度:19.20，目标压差:20";
     des.textColor = [ViewUtil colorHex:@"555555"];
     des.font = [UIFont systemFontOfSize:13];
     des.frame = CGRectMake(15,95, screenWidth-20, 30);

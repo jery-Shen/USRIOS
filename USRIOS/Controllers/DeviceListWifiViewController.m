@@ -210,7 +210,7 @@
     CGSize expectSize = [cell.info sizeThatFits:maximumLabelSize];
     cell.info.frame = CGRectMake(113,20, expectSize.width+15, expectSize.height+8);
     cell.content.text = [NSString stringWithFormat:@"温度:%@，湿度:%@，压差:%@",item[@"temp"],item[@"hr"],item[@"dp"]];
-    cell.des.text = [NSString stringWithFormat:@"换气期数:%@，进风速度:%.2lf，目标压差:%@",item[@"airCount"],[item[@"inWindSpeed"] floatValue]/100,item[@"dpTarget"]];
+    cell.des.text = [NSString stringWithFormat:@"换气次数:%@，进风速度:%.2lf，目标压差:%@",item[@"airCount"],[item[@"inWindSpeed"] floatValue]/100,item[@"dpTarget"]];
     
     return cell;
     

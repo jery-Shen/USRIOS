@@ -530,8 +530,8 @@
 				TargetAttributes = {
 					A614AAB91EDE9AFA001A1614 = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = 4NEU82K3YR;
-						ProvisioningStyle = Automatic;
+						DevelopmentTeam = C7C8DA83Q8;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -787,32 +787,32 @@
 		A614AAD21EDE9AFB001A1614 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4NEU82K3YR;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jiepeng Zheng (P7MYHR66R7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jiepeng Zheng (P7MYHR66R7)";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = C7C8DA83Q8;
 				INFOPLIST_FILE = USRIOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = usr.work.USRIOS;
+				PRODUCT_BUNDLE_IDENTIFIER = usr.work.USRIOS7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = development20181017;
 			};
 			name = Debug;
 		};
 		A614AAD31EDE9AFB001A1614 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4NEU82K3YR;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Jiepeng Zheng (C7C8DA83Q8)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Jiepeng Zheng (C7C8DA83Q8)";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = C7C8DA83Q8;
 				INFOPLIST_FILE = USRIOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = usr.work.USRIOS;
+				PRODUCT_BUNDLE_IDENTIFIER = usr.work.USRIOS7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = acHoc;
 			};
 			name = Release;
 		};
