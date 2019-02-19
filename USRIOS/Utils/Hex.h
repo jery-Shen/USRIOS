@@ -15,4 +15,5 @@
 +(NSData *)convertHexStrToData:(NSString *)str;
 +(NSString*)hexStringForData:(NSData*)data;
 +(int)parseHex4:(Byte)high : (Byte)low;
++(Byte *)hex4toByte:(int)num;
 @end

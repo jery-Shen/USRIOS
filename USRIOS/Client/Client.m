@@ -200,42 +200,48 @@
     NSMutableArray *sendQueue = [NSMutableArray array];
     int deviceId = [paramMap[@"deviceId"] intValue];
     if(paramMap[@"tempUpLimit"]){
-        int tempUpLimit = [paramMap[@"tempUpLimit"] intValue];
-        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x79,0x00,(Byte)tempUpLimit};
+        int tempUpLimit = [paramMap[@"tempUpLimit"] intValue] * 10;
+        Byte *pBytes = [Hex hex4toByte:tempUpLimit];
+        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x79,pBytes[0],pBytes[1]};
         NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
         [sendQueue addObject:data];
     }
     if(paramMap[@"tempDownLimit"]){
-        int tempDownLimit = [paramMap[@"tempDownLimit"] intValue];
-        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x7a,0x00,(Byte)tempDownLimit};
+        int tempDownLimit = [paramMap[@"tempDownLimit"] intValue] * 10;
+        Byte *pBytes = [Hex hex4toByte:tempDownLimit];
+        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x7a,pBytes[0],pBytes[1]};
         NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
         [sendQueue addObject:data];
         
     }
     if(paramMap[@"hrUpLimit"]){
-        int hrUpLimit = [paramMap[@"hrUpLimit"] intValue];
-        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x7b,0x00,(Byte)hrUpLimit};
+        int hrUpLimit = [paramMap[@"hrUpLimit"] intValue] * 10;
+        Byte *pBytes = [Hex hex4toByte:hrUpLimit];
+        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x7b,pBytes[0],pBytes[1]};
         NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
         [sendQueue addObject:data];
         
     }
     if(paramMap[@"hrDownLimit"]){
-        int hrDownLimit = [paramMap[@"hrDownLimit"] intValue];
-        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x7c,0x00,(Byte)hrDownLimit};
+        int hrDownLimit = [paramMap[@"hrDownLimit"] intValue] * 10;
+        Byte *pBytes = [Hex hex4toByte:hrDownLimit];
+        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x7c,pBytes[0],pBytes[1]};
         NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
         [sendQueue addObject:data];
         
     }
     if(paramMap[@"dpUpLimit"]){
-        int dpUpLimit = [paramMap[@"dpUpLimit"] intValue];
-        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x7d,0x00,(Byte)dpUpLimit};
+        int dpUpLimit = [paramMap[@"dpUpLimit"] intValue] * 10;
+        Byte *pBytes = [Hex hex4toByte:dpUpLimit];
+        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x7d,pBytes[0],pBytes[1]};
         NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
         [sendQueue addObject:data];
         
     }
     if(paramMap[@"dpDownLimit"]){
-        int dpDownLimit = [paramMap[@"dpDownLimit"] intValue];
-        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x7e,0x00,(Byte)dpDownLimit};
+        int dpDownLimit = [paramMap[@"dpDownLimit"] intValue] * 10;
+        Byte *pBytes = [Hex hex4toByte:dpDownLimit];
+        Byte buf[] = {(Byte)deviceId,0x06,0x03,0x7e,pBytes[0],pBytes[1]};
         NSData *data = [NSData dataWithBytes:buf length:sizeof(buf)];
         [sendQueue addObject:data];
         

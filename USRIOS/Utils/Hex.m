@@ -73,6 +73,13 @@
     return b0*256+b1;
 }
 
++(Byte *)hex4toByte:(int)num{
+    int hign = (int)(num/256);
+    int low = num%256;
+    Byte pBytes[] = {(Byte)hign,(Byte)low};
+    return pBytes;
+}
+
 +(void)test{
     NSData *data = [Hex convertHexStrToData:@"a1"];
     int deviceId = 18;
