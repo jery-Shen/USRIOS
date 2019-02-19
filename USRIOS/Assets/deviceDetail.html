@@ -21,7 +21,7 @@ body{
     left: 0px;
     top: 0px;
     position: fixed;
-    background: #ddd;
+    background: #fff;
     height: 142px;
     z-index: 999;
 }
@@ -32,8 +32,13 @@ body{
 .head .logo img{
     width: 65px;
 }
-
-
+.head .logo .logoimg{
+    display: inline-block;
+    width: 65px;
+    height: 65px;
+    background-image: url(img/logo_blue.png);
+    background-size: 65px 65px;
+}
 
 .infoBar{
 	margin-top:15px;
@@ -41,6 +46,7 @@ body{
     width: 100%;
     font-weight: bolder;
     font-size: 16px;
+    color: #128bed;
     
 }
 .updateTime{
@@ -53,6 +59,7 @@ body{
     height: 30px;
     width: 100%;
     padding: 5px 0px;
+    border-top: solid 1px #ddd;
     border-bottom: solid 1px #ddd;
     background: #fff;
     position: fixed;
@@ -201,6 +208,18 @@ body{
     background: #aaaaaa; 
 }
 
+.head.disable .infoBar{
+    color: #999999; 
+}
+.head.disable .logoimg{
+    background-image: url(img/logo_mute.png);
+}
+.head.warn .infoBar{
+    color: #e64340; 
+}
+.head.warn .logoimg{
+    background-image: url(img/logo_danger.png);
+}
 
 
 </style>
@@ -212,7 +231,9 @@ body{
 
 <div id="app">
     <div class="head" :class="headBg">
-        <p class="logo"><img src="img/logo_white.png"></p>
+        <p class="logo">
+            <span class="logoimg"></span>
+        </p>
         <div class="infoBar">{{device.infoBarStr}}</div>
     </div>
     <div class="nav-tab">
@@ -370,12 +391,12 @@ var dataStr = '{"airCount":22,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
 	var app = new Vue({
         created:function(){
         	var that = this;
-            // this.device = formatDevice(JSON.parse(dataStr));
-            // var alarms = JSON.parse(this.device.alarmHistory);
-            // if(alarms.length>0){
-            //     alarms.reverse();
-            //     this.alarms = alarms;
-            // }
+            this.device = formatDevice(JSON.parse(dataStr));
+            var alarms = JSON.parse(this.device.alarmHistory);
+            if(alarms.length>0){
+                alarms.reverse();
+                this.alarms = alarms;
+            }
            
             
             
@@ -396,11 +417,11 @@ var dataStr = '{"airCount":22,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
             'device.outWindSpeed':'valueChange',
             'device.infoBar':function(newVal,oldVal){
             	if(newVal==0){
-                    this.headBg = 'bg-disable';
+                    this.headBg = 'disable';
                 }else if(newVal==1){
-                    this.headBg = 'bg-primary';
+                    this.headBg = 'primary';
                 }else{
-                    this.headBg = 'bg-warn';
+                    this.headBg = 'warn';
                 }
             }
         },

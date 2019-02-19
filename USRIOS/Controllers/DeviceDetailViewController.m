@@ -83,13 +83,7 @@
 
 
 - (void)viewWillAppear:(BOOL)animated{
-    if([self.device[@"infoBar"] intValue]==0){
-        [self.navigationController.navigationBar setBarTintColor:[ViewUtil colorHex:@"aaaaaa"]];
-    }else if([self.device[@"infoBar"] intValue]==1){
-        [self.navigationController.navigationBar setBarTintColor:[ViewUtil colorHex:@"128bed"]];
-    }else{
-        [self.navigationController.navigationBar setBarTintColor:[ViewUtil colorHex:@"e64340"]];
-    }
+    [self.navigationController.navigationBar setBarTintColor:[ViewUtil colorHex:@"128bed"]];
     self.navigationController.navigationBar.shadowImage = [UIImage new];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
     [super viewWillDisappear:animated];
