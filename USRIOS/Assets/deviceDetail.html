@@ -391,15 +391,12 @@ var dataStr = '{"airCount":22,"airSpeed10":1500,"airSpeed12":1600,"airSpeed14":1
 	var app = new Vue({
         created:function(){
         	var that = this;
-            this.device = formatDevice(JSON.parse(dataStr));
-            var alarms = JSON.parse(this.device.alarmHistory);
-            if(alarms.length>0){
-                alarms.reverse();
-                this.alarms = alarms;
-            }
-           
-            
-            
+            // this.device = formatDevice(JSON.parse(dataStr));
+            // var alarms = JSON.parse(this.device.alarmHistory);
+            // if(alarms.length>0){
+            //     alarms.reverse();
+            //     this.alarms = alarms;
+            // }
         },
         data: {
             currentView: 'base',
