@@ -89,17 +89,6 @@
     @synchronized(dsockets){
         for(int i=0;i<dsockets.count;i++){
             NSDictionary *device = dsockets[i][@"device"];
-            if([device[@"temp"] intValue]>50){
-                [device setValue:@([device[@"temp"] intValue]/10) forKey:@"temp"];
-                [device setValue:@([device[@"tempUpLimit"] intValue]/10) forKey:@"tempUpLimit"];
-                [device setValue:@([device[@"tempDownLimit"] intValue]/10) forKey:@"tempDownLimit"];
-                [device setValue:@([device[@"hr"] intValue]/10) forKey:@"hr"];
-                [device setValue:@([device[@"hrUpLimit"] intValue]/10) forKey:@"hrUpLimit"];
-                [device setValue:@([device[@"hrDownLimit"] intValue]/10) forKey:@"hrDownLimit"];
-                [device setValue:@([device[@"dp"] intValue]/10) forKey:@"dp"];
-                [device setValue:@([device[@"dpUpLimit"] intValue]/10) forKey:@"dpUpLimit"];
-                [device setValue:@([device[@"dpDownLimit"] intValue]/10) forKey:@"dpDownLimit"];
-            }
             if([device[@"deviceId"] intValue]!=0){
                 [appDelegate.deviceList addObject:device];
             }

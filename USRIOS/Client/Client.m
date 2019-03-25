@@ -117,22 +117,23 @@
     AsyncSocket *socket = deviceSocket[@"socket"];
     device[@"deviceIp"] = socket.connectedHost;
     device[@"online"] = @1;
-    device[@"temp"] = @([Hex parseHex4:buff[3]:buff[4]]);
-    device[@"tempUpLimit"] = @([Hex parseHex4:buff[5]:buff[6]]);
-    device[@"tempDownLimit"] = @([Hex parseHex4:buff[7]:buff[8]]);
-    device[@"tempOff"] = @([Hex parseHex4:buff[9]:buff[10]]);
-    device[@"tempReally"] = @([Hex parseHex4:buff[11]:buff[12]]);
+    
+    int temp = [Hex parseHex4:buff[3]:buff[4]];
+    int tempUpLimit = [Hex parseHex4:buff[5]:buff[6]];
+    int tempDownLimit = [Hex parseHex4:buff[7]:buff[8]];
+    int tempOff = [Hex parseHex4:buff[9]:buff[10]];
+    int tempReally = [Hex parseHex4:buff[11]:buff[12]];
     
     device[@"workMode"] = @([Hex parseHex4:buff[15]:buff[16]]);
     device[@"airCount"] = @([Hex parseHex4:buff[17]:buff[18]]);
     device[@"inWindSpeed"] = @([Hex parseHex4:buff[19]:buff[20]]);
     device[@"outWindSpeed"] = @([Hex parseHex4:buff[21]:buff[22]]);
     
-    device[@"hr"] = @([Hex parseHex4:buff[23]:buff[24]]);
-    device[@"hrUpLimit"] = @([Hex parseHex4:buff[25]:buff[26]]);
-    device[@"hrDownLimit"] = @([Hex parseHex4:buff[27]:buff[28]]);
-    device[@"hrOff"] = @([Hex parseHex4:buff[29]:buff[30]]);
-    device[@"hrReally"] = @([Hex parseHex4:buff[31]:buff[32]]);
+    int hr = [Hex parseHex4:buff[23]:buff[24]];
+    int hrUpLimit = [Hex parseHex4:buff[25]:buff[26]];
+    int hrDownLimit = [Hex parseHex4:buff[27]:buff[28]];
+    int hrOff = [Hex parseHex4:buff[29]:buff[30]];
+    int hrReally = [Hex parseHex4:buff[31]:buff[32]];
     
     device[@"dp"] = @([Hex parseHex4:buff[43]:buff[44]]);
     device[@"dpUpLimit"] = @([Hex parseHex4:buff[45]:buff[46]]);
@@ -144,7 +145,9 @@
     
     device[@"communicateFalse"] = @([Hex parseHex4:buff[35]:buff[36]]);
     device[@"communicateTrue"] = @([Hex parseHex4:buff[37]:buff[38]]);
-    device[@"infoBar"] = @([Hex parseHex4:buff[39]:buff[40]]);
+    
+    int infoBar = [Hex parseHex4:buff[39]:buff[40]];
+    
     device[@"stateSwitch"] = @([Hex parseHex4:buff[41]:buff[42]]);
     
     device[@"workHour"] = @([Hex parseHex4:buff[63]:buff[64]]);
@@ -175,6 +178,35 @@
     device[@"airSpeed40"] = @([Hex parseHex4:buff[127]:buff[128]]);
     device[@"airSpeed45"] = @([Hex parseHex4:buff[129]:buff[130]]);
     device[@"airSpeed50"] = @([Hex parseHex4:buff[131]:buff[132]]);
+    
+    if(temp>50){
+        device[@"temp"] = @(temp/10);
+        device[@"tempUpLimit"] = @(tempUpLimit/10);
+        device[@"tempDownLimit"] = @(tempDownLimit/10);
+        device[@"tempOff"] = @(tempOff/10);
+        device[@"tempReally"] = @(tempReally/10);
+        
+        device[@"hr"] = @(hr/10);
+        device[@"hrUpLimit"] = @(hrUpLimit/10);
+        device[@"hrDownLimit"] = @(hrDownLimit/10);
+        device[@"hrOff"] = @(hrOff/10);
+        device[@"hrReally"] = @(hrReally/10);
+    }else{
+        device[@"temp"] = @(temp);
+        device[@"tempUpLimit"] = @(tempUpLimit);
+        device[@"tempDownLimit"] = @(tempDownLimit);
+        device[@"tempOff"] = @(tempOff);
+        device[@"tempReally"] = @(tempReally);
+        
+        device[@"hr"] = @(hr);
+        device[@"hrUpLimit"] = @(hrUpLimit);
+        device[@"hrDownLimit"] = @(hrDownLimit);
+        device[@"hrOff"] = @(hrOff);
+        device[@"hrReally"] = @(hrReally);
+    }
+    
+    device[@"infoBar"] = @(infoBar);
+    
     deviceSocket[@"unReceiveTime"] = @1;
     deviceSocket[@"receiveCount"] = @([deviceSocket[@"receiveCount"] intValue]+1);
 }
