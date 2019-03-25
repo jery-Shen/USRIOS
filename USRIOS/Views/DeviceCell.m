@@ -31,7 +31,7 @@
     title.text = @"智控1";
     title.textColor = [ViewUtil colorHex:@"333333"];
     title.font = [UIFont systemFontOfSize:18];
-    title.frame = CGRectMake(60,22, 50, 30);
+    title.frame = CGRectMake(60,22, 60, 30);
     [self.contentView addSubview:title];
     
     

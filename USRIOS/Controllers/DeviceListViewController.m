@@ -191,8 +191,12 @@
     }
     CGSize maximumLabelSize = CGSizeMake(60, 260);
     CGSize expectSize = [cell.info sizeThatFits:maximumLabelSize];
-    cell.info.frame = CGRectMake(113,20, expectSize.width+15, expectSize.height+8);
-    cell.content.text = [NSString stringWithFormat:@"温度:%.1f，湿度:%.1f，压差:%.1f",[item[@"temp"] doubleValue],[item[@"hr"] doubleValue],[item[@"dp"] doubleValue]];
+    if([item[@"deviceId"] intValue]>=10){
+        cell.info.frame = CGRectMake(120,20, expectSize.width+15, expectSize.height+8);
+    }else{
+        cell.info.frame = CGRectMake(113,20, expectSize.width+15, expectSize.height+8);
+    }
+    cell.content.text = [NSString stringWithFormat:@"温度:%.1f，湿度:%.1f，压差:%@",[item[@"temp"] doubleValue],[item[@"hr"] doubleValue],item[@"dp"]];
     cell.des.text = [NSString stringWithFormat:@"换气次数:%@，进风速度:%.2lf，目标压差:%@",item[@"airCount"],[item[@"inWindSpeed"] floatValue]/100,item[@"dpTarget"]];
     
     return cell;
@@ -205,10 +209,13 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    DeviceDetailViewController *deviceDetailVc = [[DeviceDetailViewController alloc] init];
-    deviceDetailVc.device = self.data[indexPath.item];
-    [self.navigationController pushViewController:deviceDetailVc animated:YES];
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
+    NSDictionary *item = self.data[indexPath.item];
+    if([item[@"online"] intValue]==1){
+        DeviceDetailViewController *deviceDetailVc = [[DeviceDetailViewController alloc] init];
+        deviceDetailVc.device = item;
+        [self.navigationController pushViewController:deviceDetailVc animated:YES];
+        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
+    }
 }
 
 -(void)dealloc{
