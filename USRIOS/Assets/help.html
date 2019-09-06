@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1.0" />
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>帮助系统</title>
-<link rel="stylesheet" type="text/css" href="css/weui.min.css">
-<style type="text/css">
-body {
-	background: #f8f8f8;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>帮助系统</title>
+    <link rel="stylesheet" type="text/css" href="css/weui.min.css">
+    <style type="text/css">
+        body {
+            background: #f8f8f8;
+        }
 
-</style>
+    </style>
 </head>
 
 <body>
 
 <script type="text/x-template" id="main">
-	<div>
-		<div class="weui-cells">
-			<div class="weui-cell">
+    <div>
+        <div class="weui-cells">
+            <div class="weui-cell">
                 <div class="weui-cell__bd">
                     <p>1.设置所需要的换次次数</p>
                 </div>
@@ -51,40 +51,38 @@ body {
                 </div>
                 <div class="weui-cell__ft"></div>
             </div>
-            
+
         </div>
-	</div>	
+    </div>
 </script>
 
 
+<div id="app">
 
-	<div id="app">
+    <router-view></router-view>
 
-       <router-view></router-view>
+</div>
 
-	</div>
-
-	<script src="js/vue.min.js"></script>
-	<script src="js/vue-resource.min.js"></script>
-	<script src="js/vue-router.min.js"></script>
+<script src="js/vue.min.js"></script>
+<script src="js/vue-resource.min.js"></script>
+<script src="js/vue-router.min.js"></script>
 <script type="text/javascript">
-function onData(data){
-	
-}
-const main = { template: '#main' }
-const companyInfo = { template: '#companyInfo' }
-var router = new VueRouter({
-  routes:[
-	  { path: '/', component: main },
-	 
-	]
-});
-var app = new Vue({
-  router:router,
-  data:{
-  	
-  }
-}).$mount('#app');
+    function onData(data) {
+
+    }
+
+    const main = {template: '#main'}
+    const companyInfo = {template: '#companyInfo'}
+    var router = new VueRouter({
+        routes: [
+            {path: '/', component: main},
+
+        ]
+    });
+    var app = new Vue({
+        router: router,
+        data: {}
+    }).$mount('#app');
 
 </script>
 </body>

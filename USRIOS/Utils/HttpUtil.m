@@ -10,7 +10,7 @@
 
 @implementation HttpUtil
 
-NSString * const URL_PRE = @"http://ivc.lightxx.cn/";
+NSString * const URL_PRE = @"http://ivc.lightxx.cn:8080/";
 
 +(NSDictionary *)getSign:(NSDictionary *)user{
     NSString *token = user[@"userName"];

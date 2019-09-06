@@ -1,115 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1.0" />
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>设置</title>
-<link rel="stylesheet" type="text/css" href="css/weui.min.css">
-<style type="text/css">
-body {
-	background: #f8f8f8;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>设置</title>
+    <link rel="stylesheet" type="text/css" href="css/weui.min.css">
+    <style type="text/css">
+        body {
+            background: #f8f8f8;
+        }
 
 
-</style>
+    </style>
 </head>
 
 <body>
-	<div id="app">
+<div id="app">
 
-		<div class="weui-cells">
-            <a class="weui-cell weui-cell_access" href="javascript:;" @click="userInfo()">
-                <div class="weui-cell__bd">
-                    <p>用户信息</p>
-                </div>
-                <div class="weui-cell__ft">{{user.userName}}</div>
-            </a>
-            
-        </div>
-
-        <div class="weui-cells">
-            <a class="weui-cell weui-cell_access" href="javascript:;" @click="host()">
-                <div class="weui-cell__bd">
-                    <p>我的设备</p>
-                </div>
-                <div class="weui-cell__ft">
-                </div>
-            </a>
-            <a class="weui-cell weui-cell_access" href="javascript:;" @click="help()">
-                <div class="weui-cell__bd">
-                    <p>帮助系统</p>
-                </div>
-                <div class="weui-cell__ft">
-                </div>
-            </a>
-            <a class="weui-cell weui-cell_access" href="javascript:;" @click="about()">
-                <div class="weui-cell__bd">
-                    <p>关于我们</p>
-                </div>
-                <div class="weui-cell__ft">
-                </div>
-            </a>
-            
-        </div>
-
-        <div class="weui-cells">
-           
-            <div class="weui-cell">
-                <div class="weui-cell__bd" style="text-align: center;" @click="logout()">
-                    <p>退出登录</p>
-                </div>
-                
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="javascript:;" @click="userInfo()">
+            <div class="weui-cell__bd">
+                <p>用户信息</p>
             </div>
+            <div class="weui-cell__ft">{{user.userName}}</div>
+        </a>
+
+    </div>
+
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="javascript:;" @click="host()">
+            <div class="weui-cell__bd">
+                <p>我的设备</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="javascript:;" @click="help()">
+            <div class="weui-cell__bd">
+                <p>帮助系统</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="javascript:;" @click="about()">
+            <div class="weui-cell__bd">
+                <p>关于我们</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+
+    </div>
+
+    <div class="weui-cells">
+
+        <div class="weui-cell">
+            <div class="weui-cell__bd" style="text-align: center;" @click="logout()">
+                <p>退出登录</p>
+            </div>
+
         </div>
-
-		
-
-	</div>
+    </div>
 
 
+</div>
 
 
-	<script src="js/vue.min.js"></script>
-	<script src="js/vue-resource.min.js"></script>
+<script src="js/vue.min.js"></script>
+<script src="js/vue-resource.min.js"></script>
 <script type="text/javascript">
-function onData(data){
-	app.user = JSON.parse(data);
-}
-var app = new Vue({
+    function onData(data) {
+        app.user = JSON.parse(data);
+    }
 
-	created : function() {
-		var that = this;
-        
-	},
-	data : {
-		user:{}
-	},
-	methods:{
-		userInfo:function(){
-            window.location.href="objc://userinfo";
-			//window.JsBridge.userInfo();
-		},
-		host:function(){
-            window.location.href="objc://host";
-			//window.JsBridge.host();
-		},
-		about:function(){
-            window.location.href="objc://about";
-			//window.JsBridge.about();
-		},
-		help:function(){
-            window.location.href="objc://help";
-			//window.JsBridge.help();
-		},
-		logout:function(){
-            window.location.href="objc://logout";
-			//window.JsBridge.logout();
-		}
-	}
-}).$mount('#app');
+    var app = new Vue({
+
+        created: function () {
+            var that = this;
+
+        },
+        data: {
+            user: {}
+        },
+        methods: {
+            userInfo: function () {
+                window.location.href = "objc://userinfo";
+                //window.JsBridge.userInfo();
+            },
+            host: function () {
+                window.location.href = "objc://host";
+                //window.JsBridge.host();
+            },
+            about: function () {
+                window.location.href = "objc://about";
+                //window.JsBridge.about();
+            },
+            help: function () {
+                window.location.href = "objc://help";
+                //window.JsBridge.help();
+            },
+            logout: function () {
+                window.location.href = "objc://logout";
+                //window.JsBridge.logout();
+            }
+        }
+    }).$mount('#app');
 
 </script>
 </body>
